@@ -4,6 +4,7 @@
   "rules": {
     "order/properties-alphabetical-order": true,
     "color-function-notation": null,
+    "color-function-alias-notation": null,
     "selector-pseudo-class-no-unknown": [
       true,
       { "ignorePseudoClasses": ["global"] }

@@ -1,0 +1,18 @@
+@use "sass:map";
+
+$colors: (
+  white: #f0f0f0,
+  grey-light: #d9d9d9,
+  grey-description: #979797,
+  grey-dark: #1a1a1a,
+  grey-background: #131313,
+  black: #0a0a0a,
+);
+
+@function get-hex($color) {
+  @return map.get($colors, $color);
+}
+
+@function get-rgba($color, $alpha) {
+  @return rgba(map.get($colors, $color), $alpha);
+}

@@ -6,6 +6,7 @@ specifiers:
   '@types/react': ^19.2.14
   '@types/react-dom': ^19.2.3
   '@vitejs/plugin-react': ^6.0.1
+  classnames: ^2.5.1
   eslint: ^10.2.0
   eslint-plugin-react-hooks: ^7.0.1
   eslint-plugin-react-refresh: ^0.5.2
@@ -23,6 +24,7 @@ specifiers:
   vite: ^8.0.8
 
 dependencies:
+  classnames: 2.5.1
   react: 19.2.5
   react-dom: 19.2.5_react@19.2.5
   react-router: 7.14.0_react-dom@19.2.5+react@19.2.5
@@ -1054,6 +1056,10 @@ packages:
     dependencies:
       readdirp: 4.1.2
     dev: true
+
+  /classnames/2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+    dev: false
 
   /color-convert/2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}

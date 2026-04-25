@@ -1,0 +1,65 @@
+@mixin font-figtree($weight: 400) {
+  font-family: var(--font-figtree);
+  font-weight: $weight;
+  letter-spacing: -0.04em;
+}
+
+@mixin font-smooch-sans($weight: 400) {
+  font-family: var(--font-smooch-sans);
+  font-weight: $weight;
+}
+
+@mixin media-mobile {
+  @media (width < 768px) {
+    @content;
+  }
+}
+
+@mixin media-pc {
+  @media (768px <= width) {
+    @content;
+  }
+}
+
+@mixin media-pc-medium {
+  @media (768px <= width < 1280px) {
+    @content;
+  }
+}
+
+@mixin media-pc-wide {
+  @media (1280px <= width) {
+    @content;
+  }
+}
+
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@mixin animation(
+  $keyframe-name,
+  $duration,
+  $timing-function,
+  $delay,
+  $count: infinite
+) {
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-iteration-count: $count;
+  animation-name: $keyframe-name;
+  animation-timing-function: $timing-function;
+}
+
+@mixin press-effect($transitions: null, $transforms: null) {
+  opacity: 1;
+  transform: scale(1) $transforms;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out, $transitions;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98) $transforms;
+  }
+}

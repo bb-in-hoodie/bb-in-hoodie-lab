@@ -1,0 +1,28 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.wrap {
+  min-height: 100vh;
+  padding: 40px;
+
+  @include mixins.media-mobile {
+    padding: 24px;
+  }
+}
+
+.title {
+  color: colors.get-hex(white);
+  font-size: 48px;
+
+  @include mixins.font-figtree(600);
+
+  @include mixins.media-mobile {
+    font-size: 32px;
+  }
+}
+
+.description {
+  color: colors.get-hex(grey-description);
+  font-size: 18px;
+  margin-top: 16px;
+}

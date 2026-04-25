@@ -1,0 +1,32 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.wrap {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px;
+
+  @include mixins.media-mobile {
+    padding: 24px;
+  }
+}
+
+.code {
+  color: colors.get-hex(white);
+  font-size: 96px;
+
+  @include mixins.font-figtree(700);
+
+  @include mixins.media-mobile {
+    font-size: 60px;
+  }
+}
+
+.description {
+  color: colors.get-hex(grey-description);
+  font-size: 18px;
+  margin-top: 16px;
+}
