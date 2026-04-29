@@ -4,6 +4,7 @@ import Tags from "./Tags";
 
 const meta: Meta<typeof Tags> = {
   component: Tags,
+  parameters: { layout: "padded" },
   args: {
     tags: ["THREE.JS", "FBO", "PARTICLES", "REACT"],
   },
