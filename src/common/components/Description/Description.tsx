@@ -1,29 +1,54 @@
 import classNames from "classnames/bind";
+import {
+  AnimatePresence,
+  motion,
+  type Transition,
+  type Variants,
+} from "framer-motion";
 import { type ReactNode, useState } from "react";
 
 import styles from "./Description.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = {
-  children: ReactNode;
-};
-
-function Description({ children }: Props) {
+function Description({ children }: { children: ReactNode }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <div className={cx("description")}>
-      <div className={cx("box", { collapsed: !expanded })}>
+      <motion.div
+        className={cx("box")}
+        initial={false}
+        animate={{ height: expanded ? "auto" : COLLAPSED_HEIGHT }}
+        transition={BOX_TRANSITION}
+      >
         <p className={cx("text")}>{children}</p>
-        {!expanded && <div className={cx("mask")} aria-hidden="true" />}
-      </div>
-      <button
+        <AnimatePresence>
+          {!expanded && (
+            <motion.div
+              key="mask"
+              className={cx("mask")}
+              aria-hidden="true"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={MASK_TRANSITION}
+            />
+          )}
+        </AnimatePresence>
+      </motion.div>
+      <motion.button
         type="button"
         className={cx("toggle")}
         onClick={() => setExpanded((prev) => !prev)}
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse description" : "Expand description"}
+        initial="rest"
+        animate="rest"
+        whileHover="hover"
+        whileTap="pressed"
+        variants={TOGGLE_VARIANTS}
+        transition={TOGGLE_TRANSITION}
       >
         <svg
           className={cx("chevron")}
@@ -39,9 +64,21 @@ function Description({ children }: Props) {
             strokeLinejoin="round"
           />
         </svg>
-      </button>
+      </motion.button>
     </div>
   );
 }
 
 export default Description;
+
+const COLLAPSED_HEIGHT = 100;
+
+const TOGGLE_VARIANTS: Variants = {
+  rest: { scale: 1, opacity: 0.8 },
+  hover: { scale: 1, opacity: 1 },
+  pressed: { scale: 0.88, opacity: 0.78 },
+};
+
+const TOGGLE_TRANSITION: Transition = { duration: 0.15, ease: "easeOut" };
+const BOX_TRANSITION: Transition = { duration: 0.3, ease: "easeOut" };
+const MASK_TRANSITION: Transition = { duration: 0.15 };
