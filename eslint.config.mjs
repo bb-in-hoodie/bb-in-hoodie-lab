@@ -2,11 +2,12 @@ import js from "@eslint/js";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import storybook from "eslint-plugin-storybook";
 import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", "storybook-static"] },
 
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -65,4 +66,7 @@ export default tseslint.config(
       ],
     },
   },
+
+  // Storybook
+  ...storybook.configs["flat/recommended"],
 );

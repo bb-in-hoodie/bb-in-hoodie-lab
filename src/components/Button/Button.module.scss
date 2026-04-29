@@ -1,0 +1,45 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.button {
+  border-radius: 8px;
+  cursor: pointer;
+
+  @include mixins.font-figtree(600);
+  @include mixins.press-effect;
+
+  &:focus-visible {
+    outline: 2px solid colors.get-hex(white);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+}
+
+.variant-primary {
+  background-color: colors.get-hex(white);
+  color: colors.get-hex(grey-background);
+}
+
+.variant-secondary {
+  background-color: colors.get-hex(grey-dark);
+  color: colors.get-hex(white);
+}
+
+.size-small {
+  font-size: 14px;
+  padding: 8px 14px;
+}
+
+.size-medium {
+  font-size: 16px;
+  padding: 12px 20px;
+}
+
+.size-large {
+  font-size: 20px;
+  padding: 16px 28px;
+}
