@@ -1,0 +1,85 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.description {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include mixins.media-mobile {
+    gap: 6px;
+  }
+}
+
+.box {
+  backdrop-filter: blur(2px);
+  background-color: colors.get-rgba(white, 0.02);
+  border-radius: 8px;
+  max-width: 400px;
+  overflow: hidden;
+  padding: 20px 24px;
+  position: relative;
+  width: 360px;
+
+  @include mixins.media-mobile {
+    min-width: 240px;
+    padding: 16px;
+    width: 100%;
+  }
+
+  &.collapsed {
+    height: 100px;
+  }
+}
+
+.text {
+  color: colors.get-hex(grey-description);
+  font-size: 22px;
+  white-space: break-spaces;
+
+  @include mixins.font-smooch-sans;
+
+  @include mixins.media-mobile {
+    font-size: 18px;
+  }
+}
+
+.mask {
+  backdrop-filter: blur(4px);
+  background-color: colors.get-rgba(grey-background, 0.1);
+  bottom: 0;
+  height: 60px;
+  left: 0;
+  mask-image: linear-gradient(to top, black, transparent);
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.toggle {
+  align-items: center;
+  backdrop-filter: blur(2px);
+  background-color: colors.get-rgba(white, 0.02);
+  border-radius: 50%;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+
+  @include mixins.media-mobile {
+    height: 30px;
+    width: 30px;
+  }
+
+  &[aria-expanded="false"] .chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.chevron {
+  color: colors.get-hex(grey-description);
+  height: 60%;
+  transition: transform 0.2s ease;
+  width: 60%;
+}
