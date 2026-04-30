@@ -1,6 +1,12 @@
 @use "@/common/styles/mixins" as mixins;
 @use "@/common/styles/colors" as colors;
 
+@property --mask-opacity {
+  inherits: false;
+  initial-value: 0;
+  syntax: "<number>";
+}
+
 .description {
   align-items: center;
   display: flex;
@@ -16,10 +22,16 @@
   backdrop-filter: blur(2px);
   background-color: colors.get-rgba(white, 0.02);
   border-radius: 8px;
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, calc(1 - var(--mask-opacity))),
+    black 60px
+  );
   max-width: 400px;
   overflow: hidden;
   padding: 20px 24px;
   position: relative;
+  transition: --mask-opacity 0.3s ease-out;
   width: 360px;
 
   @include mixins.media-mobile {
@@ -39,18 +51,6 @@
   @include mixins.media-mobile {
     font-size: 18px;
   }
-}
-
-.mask {
-  backdrop-filter: blur(4px);
-  background-color: colors.get-rgba(grey-background, 0.1);
-  bottom: 0;
-  height: 60px;
-  left: 0;
-  mask-image: linear-gradient(to top, black, transparent);
-  pointer-events: none;
-  position: absolute;
-  right: 0;
 }
 
 .toggle {

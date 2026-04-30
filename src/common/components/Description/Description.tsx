@@ -1,11 +1,6 @@
 import classNames from "classnames/bind";
-import {
-  AnimatePresence,
-  motion,
-  type Transition,
-  type Variants,
-} from "framer-motion";
-import { type ReactNode, useState } from "react";
+import { motion, type Transition, type Variants } from "framer-motion";
+import { type CSSProperties, type ReactNode, useState } from "react";
 
 import styles from "./Description.module.scss";
 
@@ -14,28 +9,20 @@ const cx = classNames.bind(styles);
 function Description({ children }: { children: ReactNode }) {
   const [expanded, setExpanded] = useState(false);
 
+  const boxStyle = {
+    "--mask-opacity": expanded ? 0 : 1,
+  } as CSSProperties;
+
   return (
     <div className={cx("description")}>
       <motion.div
         className={cx("box")}
+        style={boxStyle}
         initial={false}
         animate={{ height: expanded ? "auto" : COLLAPSED_HEIGHT }}
         transition={BOX_TRANSITION}
       >
         <p className={cx("text")}>{children}</p>
-        <AnimatePresence>
-          {!expanded && (
-            <motion.div
-              key="mask"
-              className={cx("mask")}
-              aria-hidden="true"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={MASK_TRANSITION}
-            />
-          )}
-        </AnimatePresence>
       </motion.div>
       <motion.button
         type="button"
@@ -81,4 +68,3 @@ const TOGGLE_VARIANTS: Variants = {
 
 const TOGGLE_TRANSITION: Transition = { duration: 0.15, ease: "easeOut" };
 const BOX_TRANSITION: Transition = { duration: 0.3, ease: "easeOut" };
-const MASK_TRANSITION: Transition = { duration: 0.15 };
