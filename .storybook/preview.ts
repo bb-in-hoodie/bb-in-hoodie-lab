@@ -1,4 +1,5 @@
 import "@/common/styles/globals.scss";
+import "./preview.scss";
 
 import type { Preview } from "@storybook/react-vite";
 
