@@ -8,13 +8,13 @@ type Props = { tags: string[] };
 
 function Tags({ tags }: Props) {
   return (
-    <div className={cx("tags")}>
+    <ul className={cx("tags")}>
       {tags.map((tag) => (
-        <span key={tag} className={cx("tag")}>
+        <li key={tag} className={cx("tag")}>
           {tag}
-        </span>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
