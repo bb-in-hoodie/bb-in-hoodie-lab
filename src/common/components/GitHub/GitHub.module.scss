@@ -2,10 +2,10 @@
 
 .github {
   display: inline-flex;
-  width: 54px;
+  width: 40px;
 
   @include mixins.media-mobile {
-    width: 40px;
+    width: 32px;
   }
 }
 
