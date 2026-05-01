@@ -20,7 +20,7 @@ const meta: Meta<typeof CommonLayout> = {
     title: "FBO Particles",
     tags: ["THREE.JS", "FBO", "PARTICLES", "REACT"],
     description: sampleText,
-    githubUrl: "https://github.com/example/repo",
+    githubUrl: "https://github.com/bb-in-hoodie/bb-in-hoodie-lab",
     children: <div style={placeholderStyle} />,
   },
 };
