@@ -1,0 +1,32 @@
+@use "@/common/styles/mixins" as mixins;
+
+.wrap {
+  inset: 0;
+  padding: 30px 40px 0;
+  position: fixed;
+
+  @include mixins.media-mobile {
+    padding: 18px 18px 0;
+  }
+}
+
+.scene {
+  inset: 0;
+  overflow: auto;
+  position: absolute;
+}
+
+.article {
+  position: relative;
+}
+
+.github {
+  bottom: 52px;
+  left: 64px;
+  position: absolute;
+
+  @include mixins.media-mobile {
+    bottom: 24px;
+    left: 24px;
+  }
+}
