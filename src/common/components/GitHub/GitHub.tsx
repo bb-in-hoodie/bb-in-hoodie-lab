@@ -24,7 +24,7 @@ function GitHub({ url, className }: Props) {
       variants={GITHUB_VARIANTS}
       transition={GITHUB_TRANSITION}
     >
-      <img className={cx("logo")} src={githubLogo} alt="" />
+      <img className={cx("logo")} src={githubLogo} alt="" draggable={false} />
     </motion.a>
   );
 }
@@ -33,7 +33,7 @@ export default GitHub;
 
 const GITHUB_VARIANTS: Variants = {
   rest: { scale: 1, opacity: 0.5 },
-  hover: { scale: 1, opacity: 1 },
+  hover: { scale: 1.02, opacity: 1 },
   pressed: { scale: 0.88, opacity: 0.48 },
 };
 

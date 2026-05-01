@@ -62,7 +62,7 @@ const COLLAPSED_HEIGHT = 100;
 
 const TOGGLE_VARIANTS: Variants = {
   rest: { scale: 1, opacity: 0.8 },
-  hover: { scale: 1, opacity: 1 },
+  hover: { scale: 1.1, opacity: 1 },
   pressed: { scale: 0.88, opacity: 0.78 },
 };
 
