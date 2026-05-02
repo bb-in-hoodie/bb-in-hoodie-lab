@@ -1,0 +1,35 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.article {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @include mixins.media-mobile {
+    gap: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @include mixins.media-mobile {
+    gap: 6px;
+  }
+}
+
+.title {
+  color: colors.get-hex(white);
+  font-size: 36px;
+  margin: 0;
+
+  @include mixins.font-figtree;
+
+  @include mixins.media-mobile {
+    font-size: 20px;
+  }
+}

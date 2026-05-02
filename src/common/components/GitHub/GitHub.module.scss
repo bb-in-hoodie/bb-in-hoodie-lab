@@ -1,0 +1,16 @@
+@use "@/common/styles/mixins" as mixins;
+
+.github {
+  display: inline-flex;
+  width: 40px;
+
+  @include mixins.media-mobile {
+    width: 32px;
+  }
+}
+
+.logo {
+  display: block;
+  height: auto;
+  width: 100%;
+}

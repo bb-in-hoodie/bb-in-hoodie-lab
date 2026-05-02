@@ -15,11 +15,12 @@
     "stylelint": "stylelint **/*.scss",
     "tsc": "tsc",
     "type-check": "tsc",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "framer-motion": "^12.38.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router": "^7.14.0"
