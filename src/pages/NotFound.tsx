@@ -7,8 +7,11 @@ const cx = classNames.bind(styles);
 function NotFound() {
   return (
     <main className={cx("wrap")}>
-      <h1 className={cx("code")}>404</h1>
-      <p className={cx("description")}>Page not found</p>
+      <div className={cx("content")}>
+        <h1 className={cx("blind")}>Error</h1>
+        <p className={cx("title")}>OOPS,</p>
+        <p className={cx("description")}>SOMETHING WENT WRONG HERE</p>
+      </div>
     </main>
   );
 }

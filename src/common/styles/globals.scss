@@ -17,7 +17,6 @@ body {
 
 body {
   position: relative;
-  white-space: break-spaces;
 
   @include mixins.font-smooch-sans;
 }

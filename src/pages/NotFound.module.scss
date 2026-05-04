@@ -4,21 +4,30 @@
 .wrap {
   align-items: center;
   display: flex;
-  flex-direction: column;
+  height: 100svh;
   justify-content: center;
-  min-height: 100vh;
-  padding: 40px;
 
   @include mixins.media-mobile {
-    padding: 24px;
+    justify-content: flex-start;
+    padding-left: 30px;
   }
 }
 
-.code {
+.content {
   color: colors.get-hex(white);
-  font-size: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-  @include mixins.font-figtree(700);
+  @include mixins.font-figtree;
+
+  @include mixins.media-mobile {
+    gap: 4px;
+  }
+}
+
+.title {
+  font-size: 120px;
 
   @include mixins.media-mobile {
     font-size: 60px;
@@ -26,7 +35,9 @@
 }
 
 .description {
-  color: colors.get-hex(grey-description);
-  font-size: 18px;
-  margin-top: 16px;
+  font-size: 60px;
+
+  @include mixins.media-mobile {
+    font-size: 30px;
+  }
 }
