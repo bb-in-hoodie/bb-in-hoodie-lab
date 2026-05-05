@@ -9,7 +9,7 @@
 
   @include mixins.media-mobile {
     justify-content: flex-start;
-    padding-left: 30px;
+    padding-inline: 30px;
   }
 }
 
