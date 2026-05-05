@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-import { SITE_DESCRIPTION, SITE_NAME } from "@/common/constants/environment";
+import { SITE_DESCRIPTION } from "@/common/constants/environment";
+import { formatPageTitle } from "@/common/helpers/metadata";
 
 type Args = {
   title?: string;
@@ -9,7 +10,7 @@ type Args = {
 
 function useDocumentMetadata({ title, description }: Args) {
   useEffect(() => {
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
+    const fullTitle = formatPageTitle(title);
     const fullDescription = description ?? SITE_DESCRIPTION;
 
     const titleMetas = [
