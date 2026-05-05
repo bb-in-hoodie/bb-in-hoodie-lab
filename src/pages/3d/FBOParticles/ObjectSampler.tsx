@@ -7,7 +7,7 @@ import { getParticlesCount } from "@/pages/3d/FBOParticles/helpers/spec";
 
 export type ObjectKey = "mobius" | "flask" | "computer";
 
-type SampledData = {
+export type SampledData = {
   positions: Float32Array;
   normals: Float32Array;
   corePosition: Vector3;
