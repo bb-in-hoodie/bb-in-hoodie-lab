@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
 import { type ReactNode } from "react";
 
+import useDocumentMetadata from "@/common/hooks/useDocumentMetadata";
+
 import Article from "../Article/Article";
 import GitHub from "../GitHub/GitHub";
 import styles from "./CommonLayout.module.scss";
@@ -16,6 +18,8 @@ type Props = {
 };
 
 function CommonLayout({ title, tags, description, githubUrl, children }: Props) {
+  useDocumentMetadata({ title, description });
+
   return (
     <main className={cx("wrap")}>
       <div className={cx("scene")}>{children}</div>
