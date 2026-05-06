@@ -22,6 +22,16 @@
   }
 }
 
+.title-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+
+  @include mixins.media-mobile {
+    gap: 10px;
+  }
+}
+
 .title {
   color: colors.get-hex(white);
   font-size: 36px;
@@ -30,6 +40,6 @@
   @include mixins.font-figtree;
 
   @include mixins.media-mobile {
-    font-size: 20px;
+    font-size: 24px;
   }
 }

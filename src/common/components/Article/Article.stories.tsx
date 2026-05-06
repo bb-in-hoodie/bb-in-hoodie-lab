@@ -21,3 +21,9 @@ export default meta;
 type Story = StoryObj<typeof Article>;
 
 export const Default: Story = {};
+
+export const WithGitHub: Story = {
+  args: {
+    githubUrl: "https://github.com/bb-in-hoodie/bb-in-hoodie-lab",
+  },
+};

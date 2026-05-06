@@ -19,14 +19,3 @@
 .article {
   position: relative;
 }
-
-.github {
-  bottom: 52px;
-  left: 64px;
-  position: absolute;
-
-  @include mixins.media-mobile {
-    bottom: 24px;
-    left: 24px;
-  }
-}
