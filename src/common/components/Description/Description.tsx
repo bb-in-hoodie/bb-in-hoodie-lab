@@ -15,15 +15,9 @@ function Description({ children }: { children: ReactNode }) {
 
   return (
     <div className={cx("description")}>
-      <motion.div
-        className={cx("box")}
-        style={boxStyle}
-        initial={false}
-        animate={{ height: expanded ? "auto" : COLLAPSED_HEIGHT }}
-        transition={BOX_TRANSITION}
-      >
+      <div className={cx("box", { expanded })} style={boxStyle}>
         <p className={cx("text")}>{children}</p>
-      </motion.div>
+      </div>
       <motion.button
         type="button"
         className={cx("toggle")}
@@ -58,8 +52,6 @@ function Description({ children }: { children: ReactNode }) {
 
 export default Description;
 
-const COLLAPSED_HEIGHT = 100;
-
 const TOGGLE_VARIANTS: Variants = {
   rest: { scale: 1, opacity: 0.8 },
   hover: { scale: 1.1, opacity: 1 },
@@ -67,4 +59,3 @@ const TOGGLE_VARIANTS: Variants = {
 };
 
 const TOGGLE_TRANSITION: Transition = { duration: 0.15, ease: "easeOut" };
-const BOX_TRANSITION: Transition = { duration: 0.3, ease: "easeOut" };

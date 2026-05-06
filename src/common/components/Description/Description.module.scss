@@ -22,6 +22,7 @@
   backdrop-filter: blur(2px);
   background-color: colors.get-rgba(white, 0.02);
   border-radius: 8px;
+  height: 100px;
   mask-image: linear-gradient(
     to top,
     rgba(0, 0, 0, calc(1 - var(--mask-opacity))),
@@ -31,10 +32,22 @@
   overflow: hidden;
   padding: 20px 24px;
   position: relative;
-  transition: --mask-opacity 0.3s ease-out;
+  transition:
+    --mask-opacity 0.3s ease-out,
+    height 0.3s ease-out;
   width: 360px;
 
+  &.expanded {
+    height: auto;
+  }
+
   @include mixins.media-mobile {
+    height: 72px;
+    mask-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, calc(1 - var(--mask-opacity))),
+      black 44px
+    );
     min-width: 240px;
     padding: 16px;
     width: 100%;

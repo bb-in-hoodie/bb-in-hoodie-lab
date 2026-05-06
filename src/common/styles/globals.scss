@@ -1,10 +1,11 @@
 @use "@/common/styles/mixins" as mixins;
 @use "@/common/styles/colors" as colors;
 
-// next/font/google is not available in Vite; CSS variables are declared here instead.
 :root {
   --font-figtree: "Figtree", sans-serif;
   --font-smooch-sans: "Smooch Sans", sans-serif;
+
+  interpolate-size: allow-keywords;
 }
 
 html,
