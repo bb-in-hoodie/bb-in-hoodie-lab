@@ -1,5 +1,6 @@
 import { shaderMaterial } from "@react-three/drei";
 import { ReactThreeFiber } from "@react-three/fiber";
+import { Vector3 } from "three";
 
 import { createDataTextureForParticle } from "@/pages/3d/FBOParticles/helpers/particles";
 import { PARTICLE_SIMULATION_SPEC } from "@/pages/3d/FBOParticles/helpers/spec";
@@ -15,7 +16,7 @@ declare module "@react-three/fiber" {
 
 const ParticlesMaterial = shaderMaterial(
   {
-    uLightSource: [-1, 0.5, 2],
+    uLightSource: new Vector3(-1, 0.5, 2),
     uPointSize: 10,
     uMinPointSize: 3,
     uMinAlpha: 0.3,

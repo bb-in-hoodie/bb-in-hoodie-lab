@@ -118,7 +118,13 @@ export default function Particles({ data }: Props) {
   }, [updateMaterial, updatePrevUniforms, data]);
 
   // add some dynamics to particles
-  useFrame(({ clock }) => {
+  useFrame(({ camera, clock }) => {
+    if (particlesMaterialRef.current?.uniforms) {
+      particlesMaterialRef.current.uniforms.uLightSource.value
+        .copy(camera.position)
+        .add(LIGHT_OFFSET);
+    }
+
     updateMaterial((material) => {
       material.uniforms.uTime.value = clock.getElapsedTime();
 
@@ -182,6 +188,10 @@ const INITIAL_POSITIONS = new Float32Array(getParticlesCount() * 3).map(
 );
 const INDICES = new Float32Array(getParticlesCount()).map((_, i) => i);
 const RANDOMS = new Float32Array(getParticlesCount()).map(() => Math.random());
+
+// world-space offset preserved from the original ParticlesMaterial uLightSource
+// so the light keeps its original distance from the camera as it follows it
+const LIGHT_OFFSET = new Vector3(-1, 0.5, 2);
 
 const createCombinedArray = (arrays: Float32Array[]) => {
   const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
