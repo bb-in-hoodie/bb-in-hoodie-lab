@@ -1,5 +1,4 @@
 import { extend, ThreeElements, useFrame } from "@react-three/fiber";
-import { useControls } from "leva";
 import { useCallback, useEffect, useRef } from "react";
 import {
   DataTexture,
@@ -20,27 +19,17 @@ import { useFboSimulation } from "@/pages/3d/FBOParticles/hooks/useFboSimulation
 import ParticleSimulationMaterial from "@/pages/3d/FBOParticles/materials/ParticleSimulationMaterial";
 import ParticlesMaterial from "@/pages/3d/FBOParticles/materials/ParticlesMaterial";
 
+import { type SampledData } from "./ObjectSampler";
+
 extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
 type Props = {
-  data: {
-    positions: Float32Array;
-    normals: Float32Array;
-  } | null;
+  data: SampledData | null;
+  noiseIntensity: number;
+  noiseSpeed: number;
 };
 
-export default function Particles({ data }: Props) {
-  const { noiseIntensity, noiseSpeed } = useControls("noise", {
-    noiseIntensity: {
-      value: 0.02,
-      min: 0,
-      max: 0.5,
-      step: 0.001,
-      label: "intensity",
-    },
-    noiseSpeed: { value: 1.0, min: 0, max: 5, step: 0.1, label: "speed" },
-  });
-
+export default function Particles({ data, noiseIntensity, noiseSpeed }: Props) {
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
   const prevPositions = useRef<Float32Array | null>(null);

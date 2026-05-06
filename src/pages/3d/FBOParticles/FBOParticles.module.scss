@@ -6,3 +6,11 @@
   height: 100%;
   width: 100%;
 }
+
+.leva-container {
+  bottom: 16px;
+  position: fixed;
+  right: 16px;
+  width: 280px;
+  z-index: 1000;
+}
