@@ -10,8 +10,10 @@
 .description {
   align-items: center;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
 
   @include mixins.media-mobile {
     gap: 6px;
@@ -28,17 +30,25 @@
     rgba(0, 0, 0, calc(1 - var(--mask-opacity))),
     black 60px
   );
+  max-height: 100%;
   max-width: 400px;
+  min-height: 0;
   overflow: hidden;
   padding: 20px 24px;
   position: relative;
+  scrollbar-width: none;
   transition:
     --mask-opacity 0.3s ease-out,
     height 0.3s ease-out;
   width: 360px;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   &.expanded {
     height: auto;
+    overflow-y: auto;
   }
 
   @include mixins.media-mobile {
@@ -72,6 +82,7 @@
   background-color: colors.get-rgba(white, 0.02);
   border-radius: 50%;
   display: flex;
+  flex-shrink: 0;
   height: 40px;
   justify-content: center;
   width: 40px;
