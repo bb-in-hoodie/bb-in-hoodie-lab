@@ -23,8 +23,6 @@ const ParticleSimulationMaterial = shaderMaterial(
     uLatestFboTexture: createDataTextureForParticle(createInitialData(2), 2),
     uStartFboTexture: createDataTextureForParticle(createInitialData(2), 2),
     uEndFboTexture: createDataTextureForParticle(createInitialData(2), 2),
-    uStartCorePosition: [0, 0, 0],
-    uEndCorePosition: [0, 0, 0],
     uResolution: [
       PARTICLE_SIMULATION_SPEC.width,
       PARTICLE_SIMULATION_SPEC.height,
@@ -32,6 +30,8 @@ const ParticleSimulationMaterial = shaderMaterial(
     uTime: 0,
     uStartTime: 0,
     uEndTime: 0,
+    uNoiseIntensity: 0.02,
+    uNoiseSpeed: 1.0,
   },
   vertex,
   fragment,

@@ -10,7 +10,6 @@ export type ObjectKey = "mobius" | "flask" | "computer";
 export type SampledData = {
   positions: Float32Array;
   normals: Float32Array;
-  corePosition: Vector3;
 };
 
 type Props = {
@@ -89,7 +88,6 @@ function ObjectSampler({ selected, onSampled }: Props) {
     onSampled({
       positions: sampledPositions,
       normals: sampledNormals,
-      corePosition: mesh.position.clone(),
     });
   }, [selected, onSampled]);
 

@@ -1,4 +1,5 @@
 import { extend, ThreeElements, useFrame } from "@react-three/fiber";
+import { useControls } from "leva";
 import { useCallback, useEffect, useRef } from "react";
 import {
   DataTexture,
@@ -25,29 +26,35 @@ type Props = {
   data: {
     positions: Float32Array;
     normals: Float32Array;
-    corePosition: Vector3;
   } | null;
 };
 
 export default function Particles({ data }: Props) {
+  const { noiseIntensity, noiseSpeed } = useControls("noise", {
+    noiseIntensity: {
+      value: 0.02,
+      min: 0,
+      max: 0.5,
+      step: 0.001,
+      label: "intensity",
+    },
+    noiseSpeed: { value: 1.0, min: 0, max: 5, step: 0.1, label: "speed" },
+  });
+
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
   const prevPositions = useRef<Float32Array | null>(null);
   const prevNormals = useRef<Float32Array | null>(null);
-  const prevCorePosition = useRef<Vector3 | null>(null);
 
   const updatedTexturesRef = useRef<{
     uStartFboTexture: DataTexture;
     uEndFboTexture: DataTexture;
-    startCorePosition: Vector3;
-    targetCorePosition: Vector3;
   } | null>(null);
 
   const updatePrevUniforms = useCallback(
-    (positions: Float32Array, normals: Float32Array, corePosition: Vector3) => {
+    (positions: Float32Array, normals: Float32Array) => {
       prevPositions.current = positions;
       prevNormals.current = normals;
-      prevCorePosition.current = corePosition;
     },
     [],
   );
@@ -75,7 +82,6 @@ export default function Particles({ data }: Props) {
     const {
       positions: targetPositions,
       normals: targetNormals,
-      corePosition: targetCorePosition,
     } = data;
 
     if (!targetPositions.length || !targetNormals.length) return;
@@ -87,7 +93,6 @@ export default function Particles({ data }: Props) {
     const startNormals = prevNormals.current?.length
       ? prevNormals.current
       : targetNormals;
-    const startCorePosition = prevCorePosition.current ?? targetCorePosition;
 
     // combine positions and normals into a texture
     const uStartFboTexture = createDataTextureForParticle(
@@ -106,11 +111,9 @@ export default function Particles({ data }: Props) {
     updatedTexturesRef.current = {
       uStartFboTexture,
       uEndFboTexture,
-      startCorePosition,
-      targetCorePosition,
     };
     return () => {
-      updatePrevUniforms(targetPositions, targetNormals, targetCorePosition);
+      updatePrevUniforms(targetPositions, targetNormals);
 
       uStartFboTexture.dispose();
       uEndFboTexture.dispose();
@@ -127,19 +130,17 @@ export default function Particles({ data }: Props) {
 
     updateMaterial((material) => {
       material.uniforms.uTime.value = clock.getElapsedTime();
+      material.uniforms.uNoiseIntensity.value = noiseIntensity;
+      material.uniforms.uNoiseSpeed.value = noiseSpeed;
 
       if (updatedTexturesRef.current) {
         const {
           uStartFboTexture,
           uEndFboTexture,
-          startCorePosition,
-          targetCorePosition,
         } = updatedTexturesRef.current;
 
         material.uniforms.uStartFboTexture.value = uStartFboTexture;
         material.uniforms.uEndFboTexture.value = uEndFboTexture;
-        material.uniforms.uStartCorePosition.value = startCorePosition;
-        material.uniforms.uEndCorePosition.value = targetCorePosition;
 
         material.uniforms.uStartTime.value = clock.getElapsedTime();
         material.uniforms.uEndTime.value =
