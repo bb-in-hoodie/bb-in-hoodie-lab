@@ -21,24 +21,27 @@ const SPECS: Record<
   ObjectKey,
   {
     modelPath: string;
+    position?: [number, number, number];
     rotation: [number, number, number];
     scale: number;
   }
 > = {
   mobius: {
     modelPath: "/models/mobius.glb",
-    rotation: [Math.PI * 0.2, Math.PI * -0.1, Math.PI * -0.1],
+    rotation: [Math.PI * 0.2, Math.PI * 0.1, Math.PI * 0.1],
     scale: 3.5,
   },
   flask: {
     modelPath: "/models/flask.glb",
+    position: [-1, 1.8, 0],
     rotation: [Math.PI * 0.1, 0, Math.PI * 0.07],
-    scale: 0.9,
+    scale: 1.6,
   },
   computer: {
     modelPath: "/models/computer.glb",
+    position: [-1, 0.3, 0],
     rotation: [Math.PI * 0.06, Math.PI * 0.72, Math.PI * 0.02],
-    scale: 2.3,
+    scale: 4,
   },
 };
 
@@ -93,6 +96,7 @@ function ObjectSampler({ selected, onSampled }: Props) {
 
   return (
     <mesh
+      position={spec.position}
       ref={meshRef}
       rotation={spec.rotation}
       scale={spec.scale}
