@@ -9,7 +9,6 @@ uniform float uNoiseNormalIntensity;
 uniform float uNoiseDriftIntensity;
 uniform float uNoiseSpeed;
 
-uniform sampler2D uLatestFboTexture;
 uniform sampler2D uStartFboTexture;
 uniform sampler2D uEndFboTexture;
 
