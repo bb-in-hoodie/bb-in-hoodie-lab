@@ -1,0 +1,16 @@
+@use "@/common/styles/mixins" as mixins;
+
+.root {
+  display: inline-flex;
+  width: 30px;
+
+  @include mixins.media-mobile {
+    width: 24px;
+  }
+}
+
+.icon {
+  display: block;
+  height: auto;
+  width: 100%;
+}

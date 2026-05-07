@@ -8,6 +8,8 @@ import styles from "./CommonLayout.module.scss";
 
 const cx = classNames.bind(styles);
 
+const HOME_URL = "https://bb-in-hoodie.dev";
+
 type Props = {
   title: string;
   tags: string[];
@@ -27,6 +29,7 @@ function CommonLayout({ title, tags, description, githubUrl, children }: Props) 
         tags={tags}
         description={description}
         githubUrl={githubUrl}
+        homeUrl={HOME_URL}
         className={cx("article")}
       />
     </main>
