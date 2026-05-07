@@ -31,7 +31,6 @@
     black 60px
   );
   max-height: 100%;
-  max-width: 400px;
   min-height: 0;
   overflow: hidden;
   padding: 20px 24px;
@@ -40,7 +39,7 @@
   transition:
     --mask-opacity 0.3s ease-out,
     height 0.3s ease-out;
-  width: 360px;
+  width: 420px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -58,6 +57,7 @@
       rgba(0, 0, 0, calc(1 - var(--mask-opacity))),
       black 44px
     );
+    max-width: 420px;
     min-width: 240px;
     padding: 16px;
     width: 100%;
