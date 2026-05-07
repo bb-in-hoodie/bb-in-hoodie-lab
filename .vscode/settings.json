@@ -6,6 +6,7 @@
     "GPGPU",
     "Metas",
     "mobius",
+    "snoise",
     "texel"
   ]
 }

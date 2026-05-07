@@ -4,7 +4,9 @@ uniform vec2 uResolution;
 uniform float uTime;
 uniform float uStartTime;
 uniform float uEndTime;
-uniform float uNoiseIntensity;
+uniform float uNoiseFrequency;
+uniform float uNoiseNormalIntensity;
+uniform float uNoiseDriftIntensity;
 uniform float uNoiseSpeed;
 
 uniform sampler2D uLatestFboTexture;
@@ -151,21 +153,23 @@ void main() {
 
   vec3 nextValues = vec3(0.0);
   if (uv.y < 0.5) {
-    // row 0: positions (morphed + noise around each particle's own morph position)
     vec3 morphed = mix(startPosition, endPosition, easedProgress);
+    vec3 normal  = normalize(mix(startNormal, endNormal, easedProgress));
 
-    // per-particle pseudo-random (UV-hash) — gives unique phase/intensity per column
-    float vRandom = fract(sin(uv.x * 43758.5453 + uv.y * 93714.123) * 12345.0);
+    float t = uTime * uNoiseSpeed;
+    vec3 samplePos = morphed * uNoiseFrequency;
 
-    float noiseScale = uNoiseIntensity * (0.2 + vRandom * 0.8);
-    float noiseSpeed = uNoiseSpeed * (0.5 + vRandom * 0.5);
-    float t = sin(uTime + vRandom * PI) * noiseSpeed;
+    // normal-direction wave: scalar noise
+    float normalNoise = snoise(vec4(samplePos, t));
+    vec3 normalDisp = normal * normalNoise * uNoiseNormalIntensity;
 
-    float noiseX = snoise(vec4(morphed, t));
-    float noiseY = snoise(vec4(morphed, t) + vec4(10.0, 10.0, 10.0, 0.0));
-    float noiseZ = snoise(vec4(morphed, t) + vec4(20.0, 20.0, 20.0, 0.0));
+    // 3-axis drift: vector noise (offset per axis)
+    float driftX = snoise(vec4(samplePos, t));
+    float driftY = snoise(vec4(samplePos, t) + vec4(10.0, 10.0, 10.0, 0.0));
+    float driftZ = snoise(vec4(samplePos, t) + vec4(20.0, 20.0, 20.0, 0.0));
+    vec3 driftDisp = vec3(driftX, driftY, driftZ) * uNoiseDriftIntensity;
 
-    nextValues = morphed + vec3(noiseX, noiseY, noiseZ) * noiseScale;
+    nextValues = morphed + normalDisp + driftDisp;
   } else {
     // row 1: normals (morphed linearly)
     nextValues = mix(startNormal, endNormal, progress);

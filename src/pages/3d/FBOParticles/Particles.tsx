@@ -25,11 +25,13 @@ extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
 type Props = {
   data: SampledData | null;
-  noiseIntensity: number;
+  noiseFrequency: number;
+  noiseNormalIntensity: number;
+  noiseDriftIntensity: number;
   noiseSpeed: number;
 };
 
-export default function Particles({ data, noiseIntensity, noiseSpeed }: Props) {
+export default function Particles({ data, noiseFrequency, noiseNormalIntensity, noiseDriftIntensity, noiseSpeed }: Props) {
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
   const prevPositions = useRef<Float32Array | null>(null);
@@ -119,7 +121,9 @@ export default function Particles({ data, noiseIntensity, noiseSpeed }: Props) {
 
     updateMaterial((material) => {
       material.uniforms.uTime.value = clock.getElapsedTime();
-      material.uniforms.uNoiseIntensity.value = noiseIntensity;
+      material.uniforms.uNoiseFrequency.value = noiseFrequency;
+      material.uniforms.uNoiseNormalIntensity.value = noiseNormalIntensity;
+      material.uniforms.uNoiseDriftIntensity.value = noiseDriftIntensity;
       material.uniforms.uNoiseSpeed.value = noiseSpeed;
 
       if (updatedTexturesRef.current) {

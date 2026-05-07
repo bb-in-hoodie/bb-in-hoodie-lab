@@ -28,7 +28,7 @@ const SPECS: Record<
 > = {
   mobius: {
     modelPath: "/models/mobius.glb",
-    rotation: [Math.PI * 0.2, Math.PI * 0.1, Math.PI * 0.1],
+    rotation: [Math.PI * -0.1, Math.PI * 0.1, Math.PI * 0.1],
     scale: 3.5,
   },
   flask: {
