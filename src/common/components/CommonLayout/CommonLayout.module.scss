@@ -1,6 +1,8 @@
 @use "@/common/styles/mixins" as mixins;
 
 .wrap {
+  display: flex;
+  flex-direction: column;
   inset: 0;
   overflow: hidden;
   padding: 30px 40px;

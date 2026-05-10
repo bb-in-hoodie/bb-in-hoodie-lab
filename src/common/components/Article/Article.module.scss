@@ -4,8 +4,13 @@
 .article {
   align-items: flex-start;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 24px;
+  min-height: 0;
+
+  // article itself should not block pointer events on the canvas
+  pointer-events: none;
 
   @include mixins.media-mobile {
     gap: 16px;
@@ -16,6 +21,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  pointer-events: auto;
 
   @include mixins.media-mobile {
     gap: 6px;

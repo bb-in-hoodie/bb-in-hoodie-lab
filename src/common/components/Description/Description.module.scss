@@ -15,8 +15,15 @@
   gap: 10px;
   min-height: 0;
 
+  // description itself should not block pointer events on the canvas
+  pointer-events: none;
+
   @include mixins.media-mobile {
     gap: 6px;
+  }
+
+  > * {
+    pointer-events: auto;
   }
 }
 
