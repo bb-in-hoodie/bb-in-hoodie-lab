@@ -38,6 +38,16 @@
   }
 }
 
+.actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+
+  @include mixins.media-mobile {
+    gap: 8px;
+  }
+}
+
 .title {
   color: colors.get-hex(white);
   font-size: 36px;
