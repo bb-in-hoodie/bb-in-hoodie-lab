@@ -1,53 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Matrix3, Mesh, Vector3 } from "three";
 import { MeshSurfaceSampler } from "three/examples/jsm/Addons.js";
 
 import GLTFGeometry from "@/common/components/GLTFGeometry/GLTFGeometry";
 import { getParticlesCount } from "@/pages/3d/FBOParticles/helpers/spec";
 
-export type ObjectKey = "mobius" | "flask" | "computer";
-
-export type SampledData = {
-  positions: Float32Array;
-  normals: Float32Array;
-};
+import { type ObjectSpec, type SampledData } from "./helpers/objectSpecs";
 
 type Props = {
-  selected: ObjectKey;
-  onSampled: (data: SampledData) => void;
+  spec: ObjectSpec;
+  isSelected?: boolean;
+  onSelected: (data: SampledData) => void;
 };
 
-const SPECS: Record<
-  ObjectKey,
-  {
-    modelPath: string;
-    position?: [number, number, number];
-    rotation: [number, number, number];
-    scale: number;
-  }
-> = {
-  mobius: {
-    modelPath: "/models/mobius.glb",
-    rotation: [Math.PI * -0.1, Math.PI * 0.1, Math.PI * 0.1],
-    scale: 3.5,
-  },
-  flask: {
-    modelPath: "/models/flask.glb",
-    position: [-1, 1.8, 0],
-    rotation: [Math.PI * 0.1, 0, Math.PI * 0.07],
-    scale: 1.6,
-  },
-  computer: {
-    modelPath: "/models/computer.glb",
-    position: [-1, 0.3, 0],
-    rotation: [Math.PI * 0.06, Math.PI * 0.72, Math.PI * 0.02],
-    scale: 4,
-  },
-};
-
-function ObjectSampler({ selected, onSampled }: Props) {
+function ObjectSampler({ spec, isSelected = false, onSelected }: Props) {
   const meshRef = useRef<Mesh>(null);
-  const spec = SPECS[selected];
+  const [sampled, setSampled] = useState<SampledData | null>(null);
 
   useEffect(() => {
     const mesh = meshRef.current;
@@ -66,6 +34,7 @@ function ObjectSampler({ selected, onSampled }: Props) {
     const sampler = new MeshSurfaceSampler(mesh).build();
     const sampledPositions = new Float32Array(count * 4);
     const sampledNormals = new Float32Array(count * 4);
+    const normalMatrix = new Matrix3().getNormalMatrix(mesh.matrixWorld);
 
     for (let i = 0; i < count; i++) {
       const position = new Vector3();
@@ -74,7 +43,6 @@ function ObjectSampler({ selected, onSampled }: Props) {
 
       mesh.localToWorld(position);
 
-      const normalMatrix = new Matrix3().getNormalMatrix(mesh.matrixWorld);
       normal.applyMatrix3(normalMatrix).normalize();
 
       sampledPositions[i * 4] = position.x;
@@ -88,11 +56,17 @@ function ObjectSampler({ selected, onSampled }: Props) {
       sampledNormals[i * 4 + 3] = 1;
     }
 
-    onSampled({
+    setSampled({
       positions: sampledPositions,
       normals: sampledNormals,
     });
-  }, [selected, onSampled]);
+  }, [spec]);
+
+  useEffect(() => {
+    if (isSelected && sampled) {
+      onSelected(sampled);
+    }
+  }, [isSelected, sampled, onSelected]);
 
   return (
     <mesh

@@ -7,32 +7,67 @@ import { Suspense, useCallback, useState } from "react";
 import CommonLayout from "@/common/components/CommonLayout/CommonLayout";
 
 import styles from "./FBOParticles.module.scss";
-import { METADATA } from "./index.metadata";
-import ObjectSampler, {
+import {
+  OBJECT_KEYS,
+  OBJECT_SPECS,
   type ObjectKey,
   type SampledData,
-} from "./ObjectSampler";
+} from "./helpers/objectSpecs";
+import { METADATA } from "./index.metadata";
+import ObjectSampler from "./ObjectSampler";
 import Particles from "./Particles";
 
 const cx = classNames.bind(styles);
 
+type ObjectSelectorSchema = {
+  object: { value: ObjectKey; options: ObjectKey[] };
+};
+
 function FBOParticles() {
-  const { object } = useControls({
+  const { object: selectedObject } = useControls<
+    ObjectSelectorSchema,
+    ObjectSelectorSchema,
+    ObjectSelectorSchema
+  >({
     object: {
       value: "mobius",
-      options: ["mobius", "flask", "computer"],
+      options: [...OBJECT_KEYS],
     },
   });
 
-  const { noiseFrequency, noiseNormalIntensity, noiseDriftIntensity, noiseSpeed } = useControls("noise", {
-    noiseFrequency: { value: 1.0, min: 0.05, max: 1.5, step: 0.01, label: "frequency" },
-    noiseNormalIntensity: { value: 0.2, min: 0, max: 0.5, step: 0.001, label: "normal" },
-    noiseDriftIntensity: { value: 0.15, min: 0, max: 0.5, step: 0.001, label: "drift" },
+  const {
+    noiseFrequency,
+    noiseNormalIntensity,
+    noiseDriftIntensity,
+    noiseSpeed,
+  } = useControls("noise", {
+    noiseFrequency: {
+      value: 1.0,
+      min: 0.05,
+      max: 1.5,
+      step: 0.01,
+      label: "frequency",
+    },
+    noiseNormalIntensity: {
+      value: 0.2,
+      min: 0,
+      max: 0.5,
+      step: 0.001,
+      label: "normal",
+    },
+    noiseDriftIntensity: {
+      value: 0.15,
+      min: 0,
+      max: 0.5,
+      step: 0.001,
+      label: "drift",
+    },
     noiseSpeed: { value: 0.5, min: 0, max: 5, step: 0.1, label: "speed" },
   });
 
   const [sampled, setSampled] = useState<SampledData | null>(null);
-  const handleSampled = useCallback(
+
+  const handleSelected = useCallback(
     (data: SampledData) => setSampled(data),
     [],
   );
@@ -53,10 +88,14 @@ function FBOParticles() {
         >
           <OrbitControls />
           <Suspense fallback={null}>
-            <ObjectSampler
-              onSampled={handleSampled}
-              selected={object as ObjectKey}
-            />
+            {OBJECT_KEYS.map((key) => (
+              <ObjectSampler
+                key={key}
+                spec={OBJECT_SPECS[key]}
+                isSelected={key === selectedObject}
+                onSelected={handleSelected}
+              />
+            ))}
           </Suspense>
           <Particles
             data={sampled}

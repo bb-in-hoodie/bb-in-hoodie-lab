@@ -19,7 +19,7 @@ import { useFboSimulation } from "@/pages/3d/FBOParticles/hooks/useFboSimulation
 import ParticleSimulationMaterial from "@/pages/3d/FBOParticles/materials/ParticleSimulationMaterial";
 import ParticlesMaterial from "@/pages/3d/FBOParticles/materials/ParticlesMaterial";
 
-import { type SampledData } from "./ObjectSampler";
+import { type SampledData } from "./helpers/objectSpecs";
 
 extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
