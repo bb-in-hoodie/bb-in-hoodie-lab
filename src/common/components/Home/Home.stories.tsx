@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { DEV_HOME_URL } from "@/common/constants/environment";
+
 import Home from "./Home";
 
 const meta: Meta<typeof Home> = {
   component: Home,
   parameters: { layout: "padded" },
   args: {
-    url: "https://bb-in-hoodie.dev",
+    url: DEV_HOME_URL,
   },
 };
 

@@ -1,14 +1,13 @@
 import classNames from "classnames/bind";
 import { type ReactNode } from "react";
 
+import { DEV_HOME_URL } from "@/common/constants/environment";
 import useDocumentMetadata from "@/common/hooks/useDocumentMetadata";
 
 import Article from "../Article/Article";
 import styles from "./CommonLayout.module.scss";
 
 const cx = classNames.bind(styles);
-
-const HOME_URL = "https://bb-in-hoodie.dev";
 
 type Props = {
   title: string;
@@ -29,7 +28,7 @@ function CommonLayout({ title, tags, description, githubUrl, children }: Props) 
         tags={tags}
         description={description}
         githubUrl={githubUrl}
-        homeUrl={HOME_URL}
+        homeUrl={DEV_HOME_URL}
         className={cx("article")}
       />
     </main>
