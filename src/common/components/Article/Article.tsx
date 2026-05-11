@@ -1,6 +1,7 @@
 import classNames from "classnames/bind";
 
 import Description from "../Description/Description";
+import GitHub from "../GitHub/GitHub";
 import Tags from "../Tags/Tags";
 import styles from "./Article.module.scss";
 
@@ -10,14 +11,18 @@ type Props = {
   title: string;
   tags: string[];
   description: string;
+  githubUrl?: string;
   className?: string;
 };
 
-function Article({ title, tags, description, className }: Props) {
+function Article({ title, tags, description, githubUrl, className }: Props) {
   return (
     <article className={cx("article", className)}>
       <header className={cx("header")}>
-        <h1 className={cx("title")}>{title}</h1>
+        <div className={cx("title-row")}>
+          <h1 className={cx("title")}>{title}</h1>
+          {githubUrl && <GitHub url={githubUrl} />}
+        </div>
         <Tags tags={tags} />
       </header>
       <Description>{description}</Description>
