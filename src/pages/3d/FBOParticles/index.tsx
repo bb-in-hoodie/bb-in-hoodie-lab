@@ -1,4 +1,4 @@
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import classNames from "classnames/bind";
 import { Leva, useControls } from "leva";
@@ -18,6 +18,10 @@ import ObjectSampler from "./ObjectSampler";
 import Particles from "./Particles";
 
 const cx = classNames.bind(styles);
+
+OBJECT_KEYS.forEach((key) => {
+  useGLTF.preload(OBJECT_SPECS[key].modelPath);
+});
 
 type ObjectSelectorSchema = {
   object: { value: ObjectKey; options: ObjectKey[] };
