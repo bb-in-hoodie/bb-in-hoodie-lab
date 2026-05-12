@@ -51,4 +51,4 @@ export const PARTICLE_SIMULATION_SPEC = {
   height: 2,
 } as const;
 
-export const TRANSITION_DURATION = 1.5;
+export const TRANSITION_DURATION = 1.0;
