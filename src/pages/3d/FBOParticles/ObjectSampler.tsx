@@ -17,14 +17,11 @@ function ObjectSampler({ spec, isSelected = false, onSelected }: Props) {
   const meshRef = useRef<Mesh>(null);
   const [sampled, setSampled] = useState<SampledData | null>(null);
 
+  // sample positions and normals from the 3d model surface on mount
   useEffect(() => {
     const mesh = meshRef.current;
 
-    if (!mesh) {
-      return;
-    }
-
-    if (!mesh.geometry || !mesh.geometry.attributes.position) {
+    if (!mesh?.geometry?.attributes.position) {
       return;
     }
 
@@ -37,23 +34,26 @@ function ObjectSampler({ spec, isSelected = false, onSelected }: Props) {
     const normalMatrix = new Matrix3().getNormalMatrix(mesh.matrixWorld);
 
     for (let i = 0; i < count; i++) {
+      // sample in the mesh's local space
       const position = new Vector3();
       const normal = new Vector3();
       sampler.sample(position, normal);
 
+      // transform the sampled position and normal into world space
       mesh.localToWorld(position);
 
       normal.applyMatrix3(normalMatrix).normalize();
 
+      // update local states with the sampled data
       sampledPositions[i * 4] = position.x;
       sampledPositions[i * 4 + 1] = position.y;
       sampledPositions[i * 4 + 2] = position.z;
-      sampledPositions[i * 4 + 3] = 1;
+      sampledPositions[i * 4 + 3] = 1; // alpha channel (RGBA padding)
 
       sampledNormals[i * 4] = normal.x;
       sampledNormals[i * 4 + 1] = normal.y;
       sampledNormals[i * 4 + 2] = normal.z;
-      sampledNormals[i * 4 + 3] = 1;
+      sampledNormals[i * 4 + 3] = 1; // alpha channel (RGBA padding)
     }
 
     setSampled({

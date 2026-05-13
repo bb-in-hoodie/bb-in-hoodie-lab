@@ -2,7 +2,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import classNames from "classnames/bind";
 import { Leva, useControls } from "leva";
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useState } from "react";
 
 import CommonLayout from "@/common/components/CommonLayout/CommonLayout";
 
@@ -19,20 +19,13 @@ import Particles from "./Particles";
 
 const cx = classNames.bind(styles);
 
+// preload 3d models
 OBJECT_KEYS.forEach((key) => {
   useGLTF.preload(OBJECT_SPECS[key].modelPath);
 });
 
-type ObjectSelectorSchema = {
-  object: { value: ObjectKey; options: ObjectKey[] };
-};
-
 function FBOParticles() {
-  const { object: selectedObject } = useControls<
-    ObjectSelectorSchema,
-    ObjectSelectorSchema,
-    ObjectSelectorSchema
-  >({
+  const { object: selectedObject } = useControls<ControlsSchema, ControlsSchema, ControlsSchema>({
     object: {
       value: "mobius",
       options: [...OBJECT_KEYS],
@@ -69,12 +62,8 @@ function FBOParticles() {
     noiseSpeed: { value: 0.5, min: 0, max: 5, step: 0.1, label: "speed" },
   });
 
-  const [sampled, setSampled] = useState<SampledData | null>(null);
-
-  const handleSelected = useCallback(
-    (data: SampledData) => setSampled(data),
-    [],
-  );
+  // sampled positions and normals from the selected 3d model
+  const [sampledData, setSampledData] = useState<SampledData | null>(null);
 
   return (
     <CommonLayout
@@ -91,24 +80,29 @@ function FBOParticles() {
           role="img"
         >
           <OrbitControls />
+
+          {/* an invisible component that loads the model and samples positions/normals from its mesh surface */}
           <Suspense fallback={null}>
             {OBJECT_KEYS.map((key) => (
               <ObjectSampler
                 key={key}
                 spec={OBJECT_SPECS[key]}
                 isSelected={key === selectedObject}
-                onSelected={handleSelected}
+                onSelected={setSampledData}
               />
             ))}
           </Suspense>
+
+          {/* displays particles with the sampled positions and normals */}
           <Particles
-            data={sampled}
+            data={sampledData}
             noiseFrequency={noiseFrequency}
             noiseNormalIntensity={noiseNormalIntensity}
             noiseDriftIntensity={noiseDriftIntensity}
             noiseSpeed={noiseSpeed}
           />
         </Canvas>
+
         <div className={cx("leva-container")}>
           <Leva fill />
         </div>
@@ -118,3 +112,7 @@ function FBOParticles() {
 }
 
 export default FBOParticles;
+
+type ControlsSchema = {
+  object: { value: ObjectKey; options: ObjectKey[] };
+};
