@@ -23,3 +23,6 @@ yarn-error.log*
 
 *storybook.log
 storybook-static
+
+# bundle analyzer output
+stats.html

@@ -8,9 +8,10 @@
   },
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "bundle": "vite-bundle-visualizer",
     "lint": "eslint src",
     "stylelint": "stylelint **/*.scss",
     "tsc": "tsc",
@@ -19,11 +20,15 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "classnames": "^2.5.1",
     "framer-motion": "^12.38.0",
+    "leva": "^0.10.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-router": "^7.14.0"
+    "react-router": "^7.14.0",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -33,6 +38,7 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.184.0",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^10.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -48,6 +54,7 @@
     "stylelint-order": "^8.1.1",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vite-bundle-visualizer": "^1.2.1"
   }
 }

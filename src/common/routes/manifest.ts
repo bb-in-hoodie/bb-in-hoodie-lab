@@ -1,4 +1,4 @@
-import { METADATA as TESTING_METADATA } from "../../pages/3d/Testing.metadata";
+import { METADATA as FBO_PARTICLES_METADATA } from "../../pages/3d/FBOParticles/index.metadata";
 
 export type RouteMetadata = {
   title: string;
@@ -8,7 +8,7 @@ export type RouteMetadata = {
 };
 
 export const ROUTES = [
-  { path: "/3d/testing", metadata: TESTING_METADATA },
+  { path: "/3d/fbo-particles", metadata: FBO_PARTICLES_METADATA },
 ] as const;
 
 export type RoutePath = (typeof ROUTES)[number]["path"];

@@ -4,8 +4,13 @@
 .article {
   align-items: flex-start;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 24px;
+  min-height: 0;
+
+  // article itself should not block pointer events on the canvas
+  pointer-events: none;
 
   @include mixins.media-mobile {
     gap: 16px;
@@ -16,9 +21,30 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  pointer-events: auto;
 
   @include mixins.media-mobile {
     gap: 6px;
+  }
+}
+
+.title-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+
+  @include mixins.media-mobile {
+    gap: 10px;
+  }
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+
+  @include mixins.media-mobile {
+    gap: 8px;
   }
 }
 
@@ -30,6 +56,6 @@
   @include mixins.font-figtree;
 
   @include mixins.media-mobile {
-    font-size: 20px;
+    font-size: 24px;
   }
 }
