@@ -76,4 +76,15 @@ function applyRouteMetadata(
 export default defineConfig({
   plugins: [react(), injectMetadata, prerenderRoutes],
   resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (/[/\\]node_modules[/\\](three|@react-three|three-stdlib)[/\\]/.test(id)) {
+            return "three";
+          }
+        },
+      },
+    },
+  },
 });

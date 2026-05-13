@@ -19,7 +19,7 @@ import { useFboSimulation } from "@/pages/3d/FBOParticles/hooks/useFboSimulation
 import ParticleSimulationMaterial from "@/pages/3d/FBOParticles/materials/ParticleSimulationMaterial";
 import ParticlesMaterial from "@/pages/3d/FBOParticles/materials/ParticlesMaterial";
 
-import { type SampledData } from "./ObjectSampler";
+import { type SampledData } from "./helpers/objectSpecs";
 
 extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
@@ -31,7 +31,13 @@ type Props = {
   noiseSpeed: number;
 };
 
-export default function Particles({ data, noiseFrequency, noiseNormalIntensity, noiseDriftIntensity, noiseSpeed }: Props) {
+export default function Particles({
+  data,
+  noiseFrequency,
+  noiseNormalIntensity,
+  noiseDriftIntensity,
+  noiseSpeed,
+}: Props) {
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
   const prevPositions = useRef<Float32Array | null>(null);
@@ -70,10 +76,7 @@ export default function Particles({ data, noiseFrequency, noiseNormalIntensity, 
   useEffect(() => {
     if (!data) return;
 
-    const {
-      positions: targetPositions,
-      normals: targetNormals,
-    } = data;
+    const { positions: targetPositions, normals: targetNormals } = data;
 
     if (!targetPositions.length || !targetNormals.length) return;
 
@@ -127,10 +130,7 @@ export default function Particles({ data, noiseFrequency, noiseNormalIntensity, 
       material.uniforms.uNoiseSpeed.value = noiseSpeed;
 
       if (updatedTexturesRef.current) {
-        const {
-          uStartFboTexture,
-          uEndFboTexture,
-        } = updatedTexturesRef.current;
+        const { uStartFboTexture, uEndFboTexture } = updatedTexturesRef.current;
 
         material.uniforms.uStartFboTexture.value = uStartFboTexture;
         material.uniforms.uEndFboTexture.value = uEndFboTexture;
@@ -151,7 +151,7 @@ export default function Particles({ data, noiseFrequency, noiseNormalIntensity, 
   return (
     <points
       // because we don't change the actual position of particles,
-      // the particles would be disappeared when camera moves if frustumCulled is set as true
+      // the particles would disappear when camera moves if frustumCulled is set as true
       frustumCulled={false}
     >
       <bufferGeometry>
@@ -174,8 +174,8 @@ export default function Particles({ data, noiseFrequency, noiseNormalIntensity, 
 }
 
 /**
- * don't know why but initial positions should be randomized values larger than 1
- * if not, the particles would disappear
+ * initial positions must be randomized values greater than 1,
+ * or particles fail to render
  */
 const INITIAL_POSITIONS = new Float32Array(getParticlesCount() * 3).map(
   () => Math.random() * 10,
