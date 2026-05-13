@@ -11,6 +11,7 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "bundle": "vite-bundle-visualizer",
     "lint": "eslint src",
     "stylelint": "stylelint **/*.scss",
     "tsc": "tsc",
@@ -53,6 +54,7 @@
     "stylelint-order": "^8.1.1",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.8"
+    "vite": "^8.0.8",
+    "vite-bundle-visualizer": "^1.2.1"
   }
 }
