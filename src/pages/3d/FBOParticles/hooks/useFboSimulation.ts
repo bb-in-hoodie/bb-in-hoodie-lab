@@ -1,6 +1,6 @@
 import { useFBO } from "@react-three/drei";
 import { ThreeElements, useFrame } from "@react-three/fiber";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   BufferAttribute,
   Mesh,
@@ -23,7 +23,12 @@ export const useFboSimulation = ({
   targetMaterialRef,
   fboSettings,
 }: UseFboSimulationParams) => {
-  const renderTarget = useFBO(...fboSettings);
+  // needs two fbo render targets to swap their roles on each frame (ping-pong)
+  const renderTargetA = useFBO(...fboSettings);
+  const renderTargetB = useFBO(...fboSettings);
+
+  const readingRenderTarget = useRef(renderTargetA);
+  const writingRenderTarget = useRef(renderTargetB);
 
   const { scene, camera, material } = useMemo(() => {
     const scene = new Scene();
@@ -35,8 +40,8 @@ export const useFboSimulation = ({
       "random",
       new BufferAttribute(
         new Float32Array(getParticlesCount()).map(() => Math.random()),
-        1
-      )
+        1,
+      ),
     );
     const material = new FboMaterialClass();
     const mesh = new Mesh(plane, material);
@@ -46,20 +51,32 @@ export const useFboSimulation = ({
   }, [FboMaterialClass]);
 
   useFrame(({ gl }) => {
-    gl.setRenderTarget(renderTarget);
+    // pass the previous texture to the material
+    material.uniforms.uLatestFboTexture.value =
+      readingRenderTarget.current.texture;
+
+    // simulate
+    gl.setRenderTarget(writingRenderTarget.current);
     gl.clear();
     gl.render(scene, camera);
     gl.setRenderTarget(null);
 
+    // handle texture update
+    const texture = writingRenderTarget.current.texture;
+
     if (targetMaterialRef?.current?.uniforms) {
-      targetMaterialRef.current.uniforms.uFboTexture.value =
-        renderTarget.texture;
+      targetMaterialRef.current.uniforms.uFboTexture.value = texture;
     }
+
+    // swap render targets
+    const temp = readingRenderTarget.current;
+    readingRenderTarget.current = writingRenderTarget.current;
+    writingRenderTarget.current = temp;
   });
 
   const updateMaterial = useCallback(
     (updater: (_material: ShaderMaterial) => void) => updater(material),
-    [material]
+    [material],
   );
 
   return {
