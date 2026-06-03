@@ -1,6 +1,8 @@
 import classNames from "classnames/bind";
 import { motion, type Transition, type Variants } from "framer-motion";
 
+import { trackEvent } from "@/common/helpers/analytics";
+
 import styles from "./IconLink.module.scss";
 
 const cx = classNames.bind(styles);
@@ -11,6 +13,7 @@ export type IconLinkProps = {
   ariaLabel: string;
   className?: string;
   iconClassName?: string;
+  eventName?: string;
 };
 
 function IconLink({
@@ -19,6 +22,7 @@ function IconLink({
   ariaLabel,
   className,
   iconClassName,
+  eventName,
 }: IconLinkProps) {
   return (
     <motion.a
@@ -33,6 +37,7 @@ function IconLink({
       whileTap="pressed"
       variants={ICON_LINK_VARIANTS}
       transition={ICON_LINK_TRANSITION}
+      onClick={eventName ? () => trackEvent(eventName) : undefined}
     >
       <img
         className={cx("icon", iconClassName)}

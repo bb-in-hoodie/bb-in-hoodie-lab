@@ -2,6 +2,8 @@ import classNames from "classnames/bind";
 import { motion, type Transition, type Variants } from "framer-motion";
 import { type CSSProperties, type ReactNode, useState } from "react";
 
+import { trackEvent } from "@/common/helpers/analytics";
+
 import styles from "./Description.module.scss";
 
 const cx = classNames.bind(styles);
@@ -21,7 +23,12 @@ function Description({ children }: { children: ReactNode }) {
       <motion.button
         type="button"
         className={cx("toggle")}
-        onClick={() => setExpanded((prev) => !prev)}
+        onClick={() => {
+          trackEvent("description_toggle", {
+            action: expanded ? "collapse" : "expand",
+          });
+          setExpanded((prev) => !prev);
+        }}
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse description" : "Expand description"}
         initial="rest"

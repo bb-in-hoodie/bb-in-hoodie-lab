@@ -11,6 +11,7 @@ function Home({ url, className }: Props) {
       iconSrc={homeIcon}
       ariaLabel="Homepage"
       className={className}
+      eventName="home_link_click"
     />
   );
 }

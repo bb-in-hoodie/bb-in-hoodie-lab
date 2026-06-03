@@ -3,7 +3,7 @@ import path from "node:path";
 
 import react from "@vitejs/plugin-react";
 import { parse } from "node-html-parser";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 
 import {
   BASE_URL,
@@ -13,18 +13,31 @@ import {
 import { formatPageTitle } from "./src/common/helpers/metadata";
 import { type RouteMetadata, ROUTES } from "./src/common/routes/manifest";
 
-const injectMetadata: Plugin = {
-  name: "inject-metadata",
-  transformIndexHtml: {
-    order: "pre",
-    handler(html) {
-      return html
-        .replace(/%SITE_NAME%/g, SITE_NAME)
-        .replace(/%SITE_DESCRIPTION%/g, SITE_DESCRIPTION)
-        .replace(/%BASE_URL%/g, BASE_URL);
+function buildInjectMetadata({ gaMeasurementId }: { gaMeasurementId?: string }): Plugin {
+  return {
+    name: "inject-metadata",
+    transformIndexHtml: {
+      order: "pre",
+      handler(html) {
+        let result = html
+          .replace(/%SITE_NAME%/g, SITE_NAME)
+          .replace(/%SITE_DESCRIPTION%/g, SITE_DESCRIPTION)
+          .replace(/%BASE_URL%/g, BASE_URL);
+
+        if (gaMeasurementId) {
+          result = result.replace(
+            "</head>",
+            `  <script async src="https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}"></script>\n` +
+              `  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaMeasurementId}');</script>\n` +
+              `</head>`,
+          );
+        }
+
+        return result;
+      },
     },
-  },
-};
+  };
+}
 
 const prerenderRoutes: Plugin = {
   name: "prerender-routes",
@@ -73,18 +86,23 @@ function applyRouteMetadata(
   return root.toString();
 }
 
-export default defineConfig({
-  plugins: [react(), injectMetadata, prerenderRoutes],
-  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (/[/\\]node_modules[/\\](three|@react-three|three-stdlib)[/\\]/.test(id)) {
-            return "three";
-          }
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  const injectMetadata = buildInjectMetadata({ gaMeasurementId: env.VITE_GA_MEASUREMENT_ID });
+
+  return {
+    plugins: [react(), injectMetadata, prerenderRoutes],
+    resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (/[/\\]node_modules[/\\](three|@react-three|three-stdlib)[/\\]/.test(id)) {
+              return "three";
+            }
+          },
         },
       },
     },
-  },
+  };
 });
