@@ -12,8 +12,8 @@ function DevButton({ url, className }: Props) {
     <motion.a
       className={cx("root", className)}
       href={url}
-      initial="rest"
-      animate="rest"
+      initial="idle"
+      animate="idle"
       whileHover="hover"
       whileTap="pressed"
       variants={DEV_BUTTON_VARIANTS}
@@ -30,7 +30,7 @@ export default DevButton;
 type Props = { url: string; className?: string };
 
 const DEV_BUTTON_VARIANTS: Variants = {
-  rest: { scale: 1, opacity: 1 },
+  idle: { scale: 1, opacity: 1 },
   hover: { scale: 1.04, opacity: 1 },
   pressed: { scale: 0.98, opacity: 0.8 },
 };
