@@ -6,6 +6,7 @@
   display: flex;
   height: 100svh;
   justify-content: center;
+  position: relative;
 
   @include mixins.media-mobile {
     justify-content: flex-start;
@@ -39,5 +40,18 @@
 
   @include mixins.media-mobile {
     font-size: 30px;
+  }
+}
+
+.dev-button {
+  bottom: min(120px, 15vh);
+  left: 0;
+  margin-inline: auto;
+  position: absolute;
+  right: 0;
+  width: fit-content;
+
+  @include mixins.media-mobile {
+    bottom: min(64px, 10vh);
   }
 }

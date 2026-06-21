@@ -1,5 +1,7 @@
 import classNames from "classnames/bind";
 
+import DevButton from "@/common/components/DevButton/DevButton";
+import { DEV_HOME_URL } from "@/common/constants/environment";
 import useDocumentMetadata from "@/common/hooks/useDocumentMetadata";
 
 import styles from "./NotFound.module.scss";
@@ -16,6 +18,7 @@ function NotFound() {
         <p className={cx("title")}>OOPS,</p>
         <p className={cx("description")}>SOMETHING WENT WRONG HERE</p>
       </div>
+      <DevButton url={DEV_HOME_URL} className={cx("dev-button")} />
     </main>
   );
 }
