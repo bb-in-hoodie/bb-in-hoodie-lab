@@ -1,0 +1,22 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.root {
+  align-items: center;
+  background-color: colors.get-hex(lime);
+  border-radius: 25px;
+  color: colors.get-hex(black);
+  display: inline-flex;
+  font-size: 24px;
+  justify-content: center;
+  padding: 10px 28px;
+  white-space: nowrap;
+
+  @include mixins.font-figtree(500);
+
+  @include mixins.media-mobile {
+    border-radius: 17px;
+    font-size: 18px;
+    padding: 6px 20px;
+  }
+}
