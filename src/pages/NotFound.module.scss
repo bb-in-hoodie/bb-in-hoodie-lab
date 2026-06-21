@@ -37,6 +37,7 @@
 
 .description {
   font-size: 60px;
+  white-space: pre-line;
 
   @include mixins.media-mobile {
     font-size: 30px;

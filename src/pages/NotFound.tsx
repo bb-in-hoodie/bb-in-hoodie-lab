@@ -16,7 +16,7 @@ function NotFound() {
       <div className={cx("content")}>
         <h1 className={cx("blind")}>Error</h1>
         <p className={cx("title")}>OOPS,</p>
-        <p className={cx("description")}>SOMETHING WENT WRONG HERE</p>
+        <p className={cx("description")}>SOMETHING WENT{"\n"}WRONG HERE</p>
       </div>
       <DevButton url={DEV_HOME_URL} className={cx("dev-button")} />
     </main>
