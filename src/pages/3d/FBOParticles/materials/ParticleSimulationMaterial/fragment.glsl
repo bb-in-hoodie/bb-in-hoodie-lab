@@ -6,6 +6,7 @@ uniform float uDeltaTime;
 uniform bool uShouldInitialize;
 uniform float uSpringStrength;
 uniform float uSpringDamping;
+uniform float uSpringJitter;
 uniform float uNoiseFrequency;
 uniform float uNoiseNormalIntensity;
 uniform float uNoiseDriftIntensity;
@@ -137,6 +138,9 @@ float snoise(vec4 v) {
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 }
 
+// 1D hash for per-particle randomness (GLSL has no random())
+float hash11(float n) { return fract(sin(n) * 43758.5453123); }
+
 void main() {
   vec2 uv = gl_FragCoord.xy / uResolution;
   // each column is one particle, so the pixel x gives this particle's index
@@ -189,13 +193,16 @@ void main() {
      *  - spring: pulls the particle toward the target
      *  - damping: resists the motion so the swing settles
      */
+    // per-particle variation so each spring responds a little differently
+    float jitterFactor = 1.0 + (hash11(index) - 0.5) * uSpringJitter;
+
     // spring (Hooke's law)
-    vec3 springForce = (noisyTarget - prevPos) * uSpringStrength;
+    vec3 springForce = (noisyTarget - prevPos) * uSpringStrength * jitterFactor;
 
     // damping
     float speed = length(prevVel);
     float dampingScale = speed / (speed + 1.0); // strong damping at high speed, weak at low speed (velocity-dependent damping)
-    vec3 dampingForce = prevVel * uSpringDamping * dampingScale;
+    vec3 dampingForce = prevVel * uSpringDamping * dampingScale * jitterFactor;
 
     vec3 acceleration = springForce - dampingForce;
 

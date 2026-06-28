@@ -36,10 +36,26 @@ function FBOParticles() {
     },
   });
 
-  const { springStrength, springDamping } = useControls("spring", {
-    springStrength: { value: 40, min: 1, max: 100, step: 1, label: "strength" },
-    springDamping: { value: 9.4, min: 0, max: 30, step: 0.05, label: "damping" },
-  });
+  const { springStrength, springDamping, springJitter } = useControls(
+    "spring",
+    {
+      springStrength: {
+        value: 50,
+        min: 1,
+        max: 150,
+        step: 1,
+        label: "strength",
+      },
+      springDamping: {
+        value: 9,
+        min: 0,
+        max: 30,
+        step: 0.05,
+        label: "damping",
+      },
+      springJitter: { value: 0.7, min: 0, max: 1, step: 0.01, label: "jitter" },
+    },
+  );
 
   const {
     noiseFrequency,
@@ -111,6 +127,7 @@ function FBOParticles() {
             noiseSpeed={noiseSpeed}
             springStrength={springStrength}
             springDamping={springDamping}
+            springJitter={springJitter}
           />
         </Canvas>
 

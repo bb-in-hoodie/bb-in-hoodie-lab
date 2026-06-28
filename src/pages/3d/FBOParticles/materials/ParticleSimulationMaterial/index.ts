@@ -31,6 +31,7 @@ const ParticleSimulationMaterial = shaderMaterial(
     uShouldInitialize: false,
     uSpringStrength: 40,
     uSpringDamping: 9.4,
+    uSpringJitter: 0.3,
     uNoiseFrequency: 1.0,
     uNoiseNormalIntensity: 0.2,
     uNoiseDriftIntensity: 0.15,

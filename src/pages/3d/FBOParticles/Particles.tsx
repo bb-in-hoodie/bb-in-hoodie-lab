@@ -35,6 +35,8 @@ type Props = {
   springStrength: number;
   /** velocity-proportional resistance that settles the spring (higher means the bounce dies sooner) */
   springDamping: number;
+  /** per-particle variation in the spring response (higher means more varied motion) */
+  springJitter: number;
 };
 
 export default function Particles({
@@ -45,6 +47,7 @@ export default function Particles({
   noiseSpeed,
   springStrength,
   springDamping,
+  springJitter,
 }: Props) {
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
@@ -106,6 +109,7 @@ export default function Particles({
       material.uniforms.uNoiseSpeed.value = noiseSpeed;
       material.uniforms.uSpringStrength.value = springStrength;
       material.uniforms.uSpringDamping.value = springDamping;
+      material.uniforms.uSpringJitter.value = springJitter;
     });
   });
 

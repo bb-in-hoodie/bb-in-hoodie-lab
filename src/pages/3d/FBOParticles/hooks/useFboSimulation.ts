@@ -2,15 +2,12 @@ import { useFBO } from "@react-three/drei";
 import { ThreeElements, useFrame } from "@react-three/fiber";
 import { useCallback, useMemo, useRef } from "react";
 import {
-  BufferAttribute,
   Mesh,
   OrthographicCamera,
   PlaneGeometry,
   Scene,
   ShaderMaterial,
 } from "three";
-
-import { getParticlesCount } from "@/pages/3d/FBOParticles/helpers/spec";
 
 export type UseFboSimulationParams = {
   FboMaterialClass: typeof ShaderMaterial;
@@ -40,13 +37,6 @@ export const useFboSimulation = ({
     camera.position.z = 0;
 
     const plane = new PlaneGeometry(2, 2);
-    plane.setAttribute(
-      "random",
-      new BufferAttribute(
-        new Float32Array(getParticlesCount()).map(() => Math.random()),
-        1,
-      ),
-    );
     const material = new FboMaterialClass();
     const mesh = new Mesh(plane, material);
     scene.add(mesh);
