@@ -25,11 +25,20 @@ OBJECT_KEYS.forEach((key) => {
 });
 
 function FBOParticles() {
-  const { object: selectedObject } = useControls<ControlsSchema, ControlsSchema, ControlsSchema>({
+  const { object: selectedObject } = useControls<
+    ControlsSchema,
+    ControlsSchema,
+    ControlsSchema
+  >({
     object: {
       value: "mobius",
       options: [...OBJECT_KEYS],
     },
+  });
+
+  const { springStrength, springDamping } = useControls("spring", {
+    springStrength: { value: 40, min: 1, max: 100, step: 1, label: "strength" },
+    springDamping: { value: 9.4, min: 0, max: 30, step: 0.05, label: "damping" },
   });
 
   const {
@@ -100,6 +109,8 @@ function FBOParticles() {
             noiseNormalIntensity={noiseNormalIntensity}
             noiseDriftIntensity={noiseDriftIntensity}
             noiseSpeed={noiseSpeed}
+            springStrength={springStrength}
+            springDamping={springDamping}
           />
         </Canvas>
 

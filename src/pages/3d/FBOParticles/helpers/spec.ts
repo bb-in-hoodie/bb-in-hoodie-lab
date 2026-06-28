@@ -47,8 +47,6 @@ export const getParticlesCount = () => {
 /** fbo spec of particle simulation material */
 export const PARTICLE_SIMULATION_SPEC = {
   width: getParticlesCount(),
-  /** 0: positions, 1: normals */
-  height: 2,
+  /** 0: positions, 1: velocities, 2: normals */
+  height: 3,
 } as const;
-
-export const TRANSITION_DURATION = 1.0;

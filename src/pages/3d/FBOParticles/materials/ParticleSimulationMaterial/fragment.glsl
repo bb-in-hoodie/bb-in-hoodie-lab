@@ -2,16 +2,17 @@
 
 uniform vec2 uResolution;
 uniform float uTime;
-uniform float uStartTime;
-uniform float uEndTime;
+uniform float uDeltaTime;
+uniform bool uShouldInitialize;
+uniform float uSpringStrength;
+uniform float uSpringDamping;
 uniform float uNoiseFrequency;
 uniform float uNoiseNormalIntensity;
 uniform float uNoiseDriftIntensity;
 uniform float uNoiseSpeed;
 
-uniform sampler2D uLatestFboTexture;
-uniform sampler2D uStartFboTexture;
-uniform sampler2D uEndFboTexture;
+uniform sampler2D uLatestFboTexture; // height 3: pos / vel / normal
+uniform sampler2D uTargetTexture;    // height 2: pos / normal
 
 /*
  * Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -136,44 +137,86 @@ float snoise(vec4 v) {
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 }
 
-float easeInOutQuad(float x) {
-  return x < 0.5 ? 2.0 * x * x : 1.0 - pow(-2.0 * x + 2.0, 2.0) / 2.0;
-}
-
 void main() {
   vec2 uv = gl_FragCoord.xy / uResolution;
+  // each column is one particle, so the pixel x gives this particle's index
+  float index = floor(gl_FragCoord.x);
+  float indexX = (index + 0.5) / uResolution.x;
 
-  vec3 startPosition = texture2D(uStartFboTexture, vec2(uv.x, 0.0)).xyz;
-  vec3 startNormal   = texture2D(uStartFboTexture, vec2(uv.x, 0.5)).xyz;
-  vec3 endPosition   = texture2D(uEndFboTexture, vec2(uv.x, 0.0)).xyz;
-  vec3 endNormal     = texture2D(uEndFboTexture, vec2(uv.x, 0.5)).xyz;
+  // read target
+  vec3 targetPos    = texture2D(uTargetTexture, vec2(indexX, 0.25)).xyz;
+  vec3 targetNormal = texture2D(uTargetTexture, vec2(indexX, 0.75)).xyz;
 
-  float progress = uTime >= uEndTime ? 1.0 : (uTime - uStartTime) / (uEndTime - uStartTime);
-  float easedProgress = easeInOutQuad(progress);
+  /*
+   * noise
+   *  - add noise to the target so the surface stays alive
+   *  - normal noise: moves the target along the surface normal
+   *  - drift noise: moves the target freely in every direction
+   */
+  float t = uTime * uNoiseSpeed;
+  vec3 samplePos = targetPos * uNoiseFrequency; // higher frequency gives tighter waves
 
-  vec3 nextValues = vec3(0.0);
-  if (uv.y < 0.5) {
-    vec3 morphed = mix(startPosition, endPosition, easedProgress);
-    vec3 normal  = normalize(mix(startNormal, endNormal, easedProgress));
+  // normal noise
+  vec3 normalNoise = normalize(targetNormal) * snoise(vec4(samplePos, t)) * uNoiseNormalIntensity;
 
-    float t = uTime * uNoiseSpeed;
-    vec3 samplePos = morphed * uNoiseFrequency;
+  // drift noise
+  float driftX = snoise(vec4(samplePos, t));
+  float driftY = snoise(vec4(samplePos, t) + vec4(10.0, 10.0, 10.0, 0.0));
+  float driftZ = snoise(vec4(samplePos, t) + vec4(20.0, 20.0, 20.0, 0.0));
+  vec3 driftNoise = vec3(driftX, driftY, driftZ) * uNoiseDriftIntensity;
 
-    // normal-direction wave: scalar noise
-    float normalNoise = snoise(vec4(samplePos, t));
-    vec3 normalDisp = normal * normalNoise * uNoiseNormalIntensity;
+  // combine the two noises
+  vec3 noisyTarget = targetPos + normalNoise + driftNoise;
 
-    // 3-axis drift: vector noise (offset per axis)
-    float driftX = snoise(vec4(samplePos, t));
-    float driftY = snoise(vec4(samplePos, t) + vec4(10.0, 10.0, 10.0, 0.0));
-    float driftZ = snoise(vec4(samplePos, t) + vec4(20.0, 20.0, 20.0, 0.0));
-    vec3 driftDisp = vec3(driftX, driftY, driftZ) * uNoiseDriftIntensity;
+  // read previous state
+  vec3 prevPos    = texture2D(uLatestFboTexture, vec2(indexX, 1.0 / 6.0)).xyz;
+  vec3 prevVel    = texture2D(uLatestFboTexture, vec2(indexX, 3.0 / 6.0)).xyz;
+  vec3 prevNormal = texture2D(uLatestFboTexture, vec2(indexX, 5.0 / 6.0)).xyz;
 
-    nextValues = morphed + normalDisp + driftDisp;
+  vec3 nextPos;
+  vec3 nextVel;
+  vec3 nextNormal;
+
+  if (uShouldInitialize) {
+    // init frame: snap to target, zero velocity, adopt target normal
+    nextPos    = targetPos;
+    nextVel    = vec3(0.0);
+    nextNormal = normalize(targetNormal);
   } else {
-    // row 1: normals (morphed linearly)
-    nextValues = mix(startNormal, endNormal, progress);
+    /*
+     * spring (damped harmonic oscillator)
+     *  - the particle carries momentum, so it overshoots the target and swings back
+     *  - spring: pulls the particle toward the target
+     *  - damping: resists the motion so the swing settles
+     */
+    // spring (Hooke's law)
+    vec3 springForce = (noisyTarget - prevPos) * uSpringStrength;
+
+    // damping
+    float speed = length(prevVel);
+    float dampingScale = speed / (speed + 1.0); // strong damping at high speed, weak at low speed (velocity-dependent damping)
+    vec3 dampingForce = prevVel * uSpringDamping * dampingScale;
+
+    vec3 acceleration = springForce - dampingForce;
+
+    // update velocity first, then move position with that new velocity (semi-implicit Euler)
+    nextVel = prevVel + acceleration * uDeltaTime;
+    nextPos = prevPos + nextVel * uDeltaTime;
+
+    // normal is not part of the spring, so just ease it toward the target normal
+    float rate = clamp(8.0 * uDeltaTime, 0.0, 1.0);
+    nextNormal = normalize(mix(prevNormal, normalize(targetNormal), rate));
   }
 
-  gl_FragColor = vec4(nextValues, 1.0);
+  // write the row this fragment belongs to (height 3 thresholds)
+  vec3 outValue;
+  if (uv.y < 1.0 / 3.0) {
+    outValue = nextPos;
+  } else if (uv.y < 2.0 / 3.0) {
+    outValue = nextVel;
+  } else {
+    outValue = nextNormal;
+  }
+
+  gl_FragColor = vec4(outValue, 1.0);
 }
