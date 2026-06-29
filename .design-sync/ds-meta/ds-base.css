@@ -1,0 +1,16 @@
+/* Remote fonts the app loads via <link> in index.html. Shipped as an @import
+   in the bundle CSS so claude.ai/design renders the real typefaces (and the
+   validator recognizes them as runtime-served — [FONT_REMOTE]). Must stay the
+   first import in ds-entry so this @import lands at the top of the bundle CSS. */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@100..900&family=Smooch+Sans:wght@100..900&display=block");
+
+/* This DS is dark-themed (globals.scss sets body #131313). The preview-card
+   template hardcodes an inline `body{background:#fff}`, which wins over
+   globals' `body` rule by load order — leaving light-on-dark components
+   invisible on a white card. A higher-specificity `html body` rule (0,0,2)
+   beats the inline `body` (0,0,1) regardless of order, restoring the dark
+   surface in both the cards and rendered designs. Harmless in designs, where
+   the white card style isn't present. */
+html body {
+  background-color: #131313;
+}

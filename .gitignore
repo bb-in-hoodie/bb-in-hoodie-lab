@@ -26,3 +26,13 @@ storybook-static
 
 # bundle analyzer output
 stats.html
+
+# design-sync (claude.ai/design) — transient build + verification artifacts
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.design-sync/ds-dist/
+.design-sync/*.log
+.ds-sync/
+/ds-bundle/

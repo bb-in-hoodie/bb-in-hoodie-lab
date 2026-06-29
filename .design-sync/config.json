@@ -1,0 +1,20 @@
+{
+  "projectId": "6408e8eb-b889-4e06-8dfc-f019c7ac3285",
+  "shape": "storybook",
+  "pkg": "bb-in-hoodie-lab",
+  "globalName": "BbInHoodieLab",
+  "buildCmd": "npx vite build --config .design-sync/vite.ds.config.ts && cp .design-sync/ds-meta/package.json .design-sync/ds-meta/ds.d.ts .design-sync/ds-dist/",
+  "entry": ".design-sync/ds-dist/ds.js",
+  "cssEntry": "bb-in-hoodie-lab.css",
+  "storybookConfigDir": ".storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "tsconfig": "../../tsconfig.json",
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Article": { "cardMode": "column" },
+    "CommonLayout": { "cardMode": "single", "primaryStory": "Default", "viewport": "1200x800" },
+    "IconLink": { "viewport": "200x140" },
+    "GitHub": { "viewport": "200x140" },
+    "Home": { "viewport": "200x140" }
+  }
+}
