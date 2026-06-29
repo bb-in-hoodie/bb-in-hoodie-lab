@@ -1,7 +1,6 @@
 import { extend, ThreeElements, useFrame } from "@react-three/fiber";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
-  DataTexture,
   FloatType,
   NearestFilter,
   NormalBlending,
@@ -13,7 +12,6 @@ import { createDataTextureForParticle } from "@/pages/3d/FBOParticles/helpers/pa
 import {
   getParticlesCount,
   PARTICLE_SIMULATION_SPEC,
-  TRANSITION_DURATION,
 } from "@/pages/3d/FBOParticles/helpers/spec";
 import { useFboSimulation } from "@/pages/3d/FBOParticles/hooks/useFboSimulation";
 import ParticleSimulationMaterial from "@/pages/3d/FBOParticles/materials/ParticleSimulationMaterial";
@@ -25,10 +23,20 @@ extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
 type Props = {
   data: SampledData | null;
+  /** multiplier applied to sampled noise offset (higher means wider particle spread) */
   noiseFrequency: number;
+  /** how far particles move along the surface normal (higher means more bump) */
   noiseNormalIntensity: number;
+  /** how far particles drift freely in 3d space (higher means more float) */
   noiseDriftIntensity: number;
+  /** speed of the noise animation over time (higher means faster shimmer) */
   noiseSpeed: number;
+  /** spring constant pulling particles toward the target surface (higher means faster snap and more overshoot) */
+  springStrength: number;
+  /** velocity-proportional resistance that settles the spring (higher means the bounce dies sooner) */
+  springDamping: number;
+  /** per-particle variation in the spring response (higher means more varied motion) */
+  springJitter: number;
 };
 
 export default function Particles({
@@ -37,26 +45,13 @@ export default function Particles({
   noiseNormalIntensity,
   noiseDriftIntensity,
   noiseSpeed,
+  springStrength,
+  springDamping,
+  springJitter,
 }: Props) {
   const particlesMaterialRef = useRef<ThreeElements["shaderMaterial"]>(null);
 
-  const prevPositions = useRef<Float32Array | null>(null);
-  const prevNormals = useRef<Float32Array | null>(null);
-
-  const updatedTexturesRef = useRef<{
-    uStartFboTexture: DataTexture;
-    uEndFboTexture: DataTexture;
-  } | null>(null);
-
-  const updatePrevUniforms = useCallback(
-    (positions: Float32Array, normals: Float32Array) => {
-      prevPositions.current = positions;
-      prevNormals.current = normals;
-    },
-    [],
-  );
-
-  const { updateMaterial } = useFboSimulation({
+  const { updateMaterial, requestInitializationOnce } = useFboSimulation({
     FboMaterialClass: ParticleSimulationMaterial,
     fboSettings: [
       PARTICLE_SIMULATION_SPEC.width,
@@ -76,43 +71,27 @@ export default function Particles({
   useEffect(() => {
     if (!data) return;
 
-    const { positions: targetPositions, normals: targetNormals } = data;
+    const { positions, normals } = data;
 
-    if (!targetPositions.length || !targetNormals.length) return;
+    if (!positions.length || !normals.length) return;
 
-    // handle initial render (where prevPositions and prevNormals are null)
-    const startPositions = prevPositions.current?.length
-      ? prevPositions.current
-      : targetPositions;
-    const startNormals = prevNormals.current?.length
-      ? prevNormals.current
-      : targetNormals;
-
-    // combine positions and normals into a texture
-    const uStartFboTexture = createDataTextureForParticle(
-      createCombinedArray([startPositions, startNormals]),
+    const uTargetTexture = createDataTextureForParticle(
+      createCombinedArray([positions, normals]),
       2,
     );
-    const uEndFboTexture = createDataTextureForParticle(
-      createCombinedArray([targetPositions, targetNormals]),
-      2,
-    );
+    uTargetTexture.needsUpdate = true;
 
-    uStartFboTexture.needsUpdate = true;
-    uEndFboTexture.needsUpdate = true;
+    updateMaterial((material) => {
+      material.uniforms.uTargetTexture.value = uTargetTexture;
+    });
 
-    // schedule for the update
-    updatedTexturesRef.current = {
-      uStartFboTexture,
-      uEndFboTexture,
-    };
+    // on the first object the buffer is empty, so fill it with the target as the initial state
+    requestInitializationOnce();
+
     return () => {
-      updatePrevUniforms(targetPositions, targetNormals);
-
-      uStartFboTexture.dispose();
-      uEndFboTexture.dispose();
+      uTargetTexture.dispose();
     };
-  }, [updateMaterial, updatePrevUniforms, data]);
+  }, [updateMaterial, requestInitializationOnce, data]);
 
   // add some dynamics to particles
   useFrame(({ camera, clock }) => {
@@ -128,19 +107,9 @@ export default function Particles({
       material.uniforms.uNoiseNormalIntensity.value = noiseNormalIntensity;
       material.uniforms.uNoiseDriftIntensity.value = noiseDriftIntensity;
       material.uniforms.uNoiseSpeed.value = noiseSpeed;
-
-      if (updatedTexturesRef.current) {
-        const { uStartFboTexture, uEndFboTexture } = updatedTexturesRef.current;
-
-        material.uniforms.uStartFboTexture.value = uStartFboTexture;
-        material.uniforms.uEndFboTexture.value = uEndFboTexture;
-
-        material.uniforms.uStartTime.value = clock.getElapsedTime();
-        material.uniforms.uEndTime.value =
-          clock.getElapsedTime() + TRANSITION_DURATION;
-
-        updatedTexturesRef.current = null;
-      }
+      material.uniforms.uSpringStrength.value = springStrength;
+      material.uniforms.uSpringDamping.value = springDamping;
+      material.uniforms.uSpringJitter.value = springJitter;
     });
   });
 

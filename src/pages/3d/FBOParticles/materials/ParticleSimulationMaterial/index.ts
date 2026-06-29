@@ -20,15 +20,18 @@ const createInitialData = (height: number) =>
 
 const ParticleSimulationMaterial = shaderMaterial(
   {
-    uStartFboTexture: createDataTextureForParticle(createInitialData(2), 2),
-    uEndFboTexture: createDataTextureForParticle(createInitialData(2), 2),
+    uLatestFboTexture: createDataTextureForParticle(createInitialData(3), 3),
+    uTargetTexture: createDataTextureForParticle(createInitialData(2), 2),
     uResolution: [
       PARTICLE_SIMULATION_SPEC.width,
       PARTICLE_SIMULATION_SPEC.height,
     ],
     uTime: 0,
-    uStartTime: 0,
-    uEndTime: 0,
+    uDeltaTime: 0,
+    uShouldInitialize: false,
+    uSpringStrength: 40,
+    uSpringDamping: 9.4,
+    uSpringJitter: 0.3,
     uNoiseFrequency: 1.0,
     uNoiseNormalIntensity: 0.2,
     uNoiseDriftIntensity: 0.15,
