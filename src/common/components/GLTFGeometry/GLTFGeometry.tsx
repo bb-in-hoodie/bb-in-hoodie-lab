@@ -2,9 +2,9 @@ import { useGLTF } from "@react-three/drei";
 import { useMemo } from "react";
 import { BufferGeometry, Mesh } from "three";
 
-type Props = {
+interface Props {
   modelPath: string;
-};
+}
 
 function GLTFGeometry({ modelPath }: Props) {
   const { scene } = useGLTF(modelPath);

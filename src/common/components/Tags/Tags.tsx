@@ -4,7 +4,9 @@ import styles from "./Tags.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = { tags: string[] };
+interface Props {
+  tags: string[];
+}
 
 function Tags({ tags }: Props) {
   return (

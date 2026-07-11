@@ -23,13 +23,13 @@ import { type SampledData } from "./helpers/objectSpecs";
 
 extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
-type Props = {
+interface Props {
   data: SampledData | null;
   noiseFrequency: number;
   noiseNormalIntensity: number;
   noiseDriftIntensity: number;
   noiseSpeed: number;
-};
+}
 
 export default function Particles({
   data,

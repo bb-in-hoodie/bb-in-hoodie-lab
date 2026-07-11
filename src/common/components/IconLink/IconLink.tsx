@@ -7,14 +7,14 @@ import styles from "./IconLink.module.scss";
 
 const cx = classNames.bind(styles);
 
-export type IconLinkProps = {
+export interface IconLinkProps {
   url: string;
   iconSrc: string;
   ariaLabel: string;
   className?: string;
   iconClassName?: string;
   eventName?: string;
-};
+}
 
 function IconLink({
   url,

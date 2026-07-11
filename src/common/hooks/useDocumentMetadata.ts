@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { SITE_DESCRIPTION } from "@/common/constants/environment";
 import { formatPageTitle } from "@/common/helpers/metadata";
 
-type Args = {
+interface Args {
   title?: string;
   description?: string;
-};
+}
 
 function useDocumentMetadata({ title, description }: Args) {
   useEffect(() => {

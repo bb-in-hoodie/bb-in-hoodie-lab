@@ -7,7 +7,10 @@ import styles from "./GitHub.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = { url: string; className?: string };
+interface Props {
+  url: string;
+  className?: string;
+}
 
 function GitHub({ url, className }: Props) {
   return (

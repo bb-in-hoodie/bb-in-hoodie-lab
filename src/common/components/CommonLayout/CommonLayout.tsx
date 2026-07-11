@@ -9,13 +9,13 @@ import styles from "./CommonLayout.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = {
+interface Props {
   title: string;
   tags: string[];
   description: string;
   githubUrl?: string;
   children?: ReactNode;
-};
+}
 
 function CommonLayout({ title, tags, description, githubUrl, children }: Props) {
   useDocumentMetadata({ title, description });

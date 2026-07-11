@@ -4,13 +4,13 @@ import styles from "./Checkbox.module.scss";
 
 const cx = classNames.bind(styles);
 
-export type CheckboxProps = {
+export interface CheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
   ariaLabel?: string;
   className?: string;
-};
+}
 
 function Checkbox({
   checked,

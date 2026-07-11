@@ -1,14 +1,14 @@
-export type ObjectSpec = {
+export interface ObjectSpec {
   modelPath: string;
   position?: [number, number, number];
   rotation: [number, number, number];
   scale: number;
-};
+}
 
-export type SampledData = {
+export interface SampledData {
   positions: Float32Array;
   normals: Float32Array;
-};
+}
 
 export const OBJECT_KEYS = ["mobius", "flask", "computer"] as const;
 

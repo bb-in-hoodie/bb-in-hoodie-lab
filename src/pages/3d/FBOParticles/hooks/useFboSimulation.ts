@@ -12,11 +12,11 @@ import {
 
 import { getParticlesCount } from "@/pages/3d/FBOParticles/helpers/spec";
 
-export type UseFboSimulationParams = {
+export interface UseFboSimulationParams {
   FboMaterialClass: typeof ShaderMaterial;
   fboSettings: Parameters<typeof useFBO>;
   targetMaterialRef?: React.RefObject<ThreeElements["shaderMaterial"] | null>;
-};
+}
 
 export const useFboSimulation = ({
   FboMaterialClass,

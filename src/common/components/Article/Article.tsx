@@ -8,14 +8,14 @@ import styles from "./Article.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = {
+interface Props {
   title: string;
   tags: string[];
   description: string;
   githubUrl?: string;
   homeUrl?: string;
   className?: string;
-};
+}
 
 function Article({
   title,

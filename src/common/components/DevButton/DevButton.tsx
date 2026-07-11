@@ -27,7 +27,10 @@ function DevButton({ url, className }: Props) {
 
 export default DevButton;
 
-type Props = { url: string; className?: string };
+interface Props {
+  url: string;
+  className?: string;
+}
 
 const DEV_BUTTON_VARIANTS: Variants = {
   idle: { scale: 1, opacity: 1 },
