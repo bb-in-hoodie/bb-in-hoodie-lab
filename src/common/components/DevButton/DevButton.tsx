@@ -10,7 +10,6 @@ const cx = classNames.bind(styles);
 function DevButton({ url, className }: Props) {
   return (
     <motion.a
-      className={cx("root", className)}
       href={url}
       initial="idle"
       animate="idle"
@@ -19,6 +18,7 @@ function DevButton({ url, className }: Props) {
       variants={DEV_BUTTON_VARIANTS}
       transition={DEV_BUTTON_TRANSITION}
       onClick={() => trackEvent("dev_button_click")}
+      className={cx("root", className)}
     >
       visit bb-in-hoodie.dev
     </motion.a>
