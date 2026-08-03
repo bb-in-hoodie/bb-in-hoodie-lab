@@ -30,8 +30,7 @@
   width: 1px;
 
   &:focus-visible + .box {
-    outline: 2px solid colors.get-rgba(white, 0.4);
-    outline-offset: 2px;
+    @include mixins.focus-ring;
   }
 }
 

@@ -1,5 +1,7 @@
 /* stylelint-disable media-feature-range-notation */
 
+@use "@/common/styles/colors" as colors;
+
 @mixin font-figtree($weight: 400) {
   font-family: var(--font-figtree);
   font-weight: $weight;
@@ -85,4 +87,9 @@
     opacity: 0.9;
     transform: scale(0.98) $transforms;
   }
+}
+
+@mixin focus-ring {
+  outline: 2px solid colors.get-rgba(white, 0.4);
+  outline-offset: 2px;
 }
