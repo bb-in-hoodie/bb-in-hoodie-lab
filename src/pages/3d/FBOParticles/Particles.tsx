@@ -180,7 +180,7 @@ export default function Particles({
 const INITIAL_POSITIONS = new Float32Array(getParticlesCount() * 3).map(
   () => Math.random() * 10,
 );
-const INDICES = new Float32Array(getParticlesCount()).map((_, i) => i);
+const INDICES = new Float32Array(getParticlesCount()).map((_, index) => index);
 const RANDOMS = new Float32Array(getParticlesCount()).map(() => Math.random());
 
 // world-space offset preserved from the original ParticlesMaterial uLightSource

@@ -25,7 +25,11 @@ OBJECT_KEYS.forEach((key) => {
 });
 
 function FBOParticles() {
-  const { object: selectedObject } = useControls<ControlsSchema, ControlsSchema, ControlsSchema>({
+  const { object: selectedObject } = useControls<
+    ControlsSchema,
+    ControlsSchema,
+    ControlsSchema
+  >({
     object: {
       value: "mobius",
       options: [...OBJECT_KEYS],
@@ -76,8 +80,8 @@ function FBOParticles() {
         <Canvas
           aria-label="FBO Particles 3D scene"
           camera={{ position: [0, 0, 30], fov: 50 }}
-          className={cx("canvas")}
           role="img"
+          className={cx("canvas")}
         >
           <OrbitControls />
 
@@ -113,6 +117,7 @@ function FBOParticles() {
 
 export default FBOParticles;
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type ControlsSchema = {
   object: { value: ObjectKey; options: ObjectKey[] };
 };

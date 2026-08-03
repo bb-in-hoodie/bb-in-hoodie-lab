@@ -18,9 +18,9 @@ function GitHub({ url, className }: Props) {
       url={url}
       iconSrc={githubLogo}
       ariaLabel="GitHub repository"
-      className={className}
       iconClassName={cx("logo")}
       eventName="github_link_click"
+      className={className}
     />
   );
 }

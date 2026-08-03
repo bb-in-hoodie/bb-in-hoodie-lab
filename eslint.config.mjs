@@ -12,6 +12,13 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
+  // prefer interface over type for object shapes
+  {
+    rules: {
+      "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    },
+  },
+
   // React hooks
   {
     plugins: {
