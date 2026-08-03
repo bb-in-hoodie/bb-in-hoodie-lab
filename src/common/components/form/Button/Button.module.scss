@@ -5,15 +5,14 @@
   border-radius: 4px;
   font-size: 16px;
   padding: 7px 16px;
-  transition:
-    background-color 0.15s ease-out,
-    color 0.15s ease-out;
 
   @include mixins.font-smooch-sans;
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
+  );
 
   &:focus-visible {
-    outline: 2px solid colors.get-rgba(white, 0.4);
-    outline-offset: 2px;
+    @include mixins.focus-ring;
   }
 
   &:disabled {

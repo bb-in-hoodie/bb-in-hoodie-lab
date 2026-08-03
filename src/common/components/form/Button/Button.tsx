@@ -25,9 +25,9 @@ function Button({
   return (
     <button
       type={type}
-      className={cx("button", variant, className)}
       onClick={onClick}
       disabled={disabled}
+      className={cx("button", variant, className)}
     >
       {children}
     </button>
