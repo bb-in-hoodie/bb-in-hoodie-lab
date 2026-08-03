@@ -17,12 +17,11 @@ function Description({ children }: { children: ReactNode }) {
 
   return (
     <div className={cx("description")}>
-      <div className={cx("box", { expanded })} style={boxStyle}>
+      <div style={boxStyle} className={cx("box", { expanded })}>
         <p className={cx("text")}>{children}</p>
       </div>
       <motion.button
         type="button"
-        className={cx("toggle")}
         onClick={() => {
           trackEvent("description_toggle", {
             action: expanded ? "collapse" : "expand",
@@ -37,12 +36,13 @@ function Description({ children }: { children: ReactNode }) {
         whileTap="pressed"
         variants={TOGGLE_VARIANTS}
         transition={TOGGLE_TRANSITION}
+        className={cx("toggle")}
       >
         <svg
-          className={cx("chevron")}
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
+          className={cx("chevron")}
         >
           <path
             d="M6 15L12 9L18 15"
