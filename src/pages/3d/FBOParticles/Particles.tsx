@@ -74,11 +74,15 @@ export default function Particles({
 
   // convert vectors into textures and send those to material
   useEffect(() => {
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
     const { positions: targetPositions, normals: targetNormals } = data;
 
-    if (!targetPositions.length || !targetNormals.length) return;
+    if (!targetPositions.length || !targetNormals.length) {
+      return;
+    }
 
     // handle initial render (where prevPositions and prevNormals are null)
     const startPositions = prevPositions.current?.length

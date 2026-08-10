@@ -41,11 +41,15 @@ function useDocumentMetadata({ title, description }: Args) {
       document.title = previousTitle;
       titleMetas.forEach((meta, index) => {
         const previous = previousTitleContents[index];
-        if (previous !== null) meta?.setAttribute("content", previous);
+        if (previous !== null) {
+          meta?.setAttribute("content", previous);
+        }
       });
       descriptionMetas.forEach((meta, index) => {
         const previous = previousDescriptionContents[index];
-        if (previous !== null) meta?.setAttribute("content", previous);
+        if (previous !== null) {
+          meta?.setAttribute("content", previous);
+        }
       });
     };
   }, [title, description]);

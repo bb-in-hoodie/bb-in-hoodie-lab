@@ -19,7 +19,9 @@ function GLTFGeometry({ modelPath }: Props) {
     return result;
   }, [scene]);
 
-  if (!geometry) return null;
+  if (!geometry) {
+    return null;
+  }
 
   return <primitive object={geometry} attach="geometry" />;
 }

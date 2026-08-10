@@ -19,6 +19,13 @@ export default tseslint.config(
     },
   },
 
+  // always use block form for if statements, including early returns
+  {
+    rules: {
+      curly: ["error", "all"],
+    },
+  },
+
   // React hooks
   {
     plugins: {
