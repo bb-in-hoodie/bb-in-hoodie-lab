@@ -42,10 +42,11 @@
   display: inline-flex;
   height: 18px;
   justify-content: center;
-  transition:
-    background-color 0.15s ease-out,
-    border-color 0.15s ease-out;
   width: 18px;
+
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, border-color 0.15s ease-out)
+  );
 
   svg {
     opacity: 0;

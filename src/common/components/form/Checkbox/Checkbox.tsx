@@ -25,14 +25,14 @@ function Checkbox({
       {/* invisible checkbox input */}
       <input
         type="checkbox"
-        className={cx("input")}
         checked={checked}
         aria-label={label ? undefined : ariaLabel}
         onChange={(e) => onChange(e.target.checked)}
+        className={cx("input")}
       />
 
       {/* visible checkbox */}
-      <span className={cx("box", { checked })} aria-hidden="true">
+      <span aria-hidden="true" className={cx("box", { checked })}>
         <svg width="10" height="8" viewBox="0 0 10 8">
           <path
             d="M1 4L4 7L9 1"

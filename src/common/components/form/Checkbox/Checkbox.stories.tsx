@@ -32,9 +32,9 @@ function StatefulCheckbox({ label, ariaLabel, className }: Partial<CheckboxProps
     <Checkbox
       label={label}
       ariaLabel={ariaLabel}
-      className={className}
       checked={checked}
       onChange={setChecked}
+      className={className}
     />
   );
 }
