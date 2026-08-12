@@ -1,0 +1,28 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.fieldset {
+  background-color: colors.get-rgba(white, 0.02);
+  border: none;
+  border-radius: 8px;
+  margin: 0;
+  min-inline-size: auto;
+  padding: 20px 24px 24px;
+}
+
+.legend {
+  color: colors.get-hex(grey-description);
+  font-size: 16px;
+  letter-spacing: 0.16em;
+  margin-bottom: 4px;
+  padding: 0;
+  text-transform: uppercase;
+
+  @include mixins.font-smooch-sans;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
