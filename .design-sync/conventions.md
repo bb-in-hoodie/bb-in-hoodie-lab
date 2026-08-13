@@ -24,12 +24,16 @@ names.
 There is **no utility-class or token-prop system** — component styling is internal
 and not author-facing. Style your own layout glue against the dark theme:
 
-- Surface / text colors that appear in the shipped CSS: background `#131313`,
-  primary text `#d9d9d9`, brighter text `#f0f0f0`, muted text `#979797`.
+- Surface / text colors that appear in the shipped CSS: page background `#131313`,
+  panel/dropdown background `#1a1a1a`, deepest surface `#0a0a0a`, primary text
+  `#d9d9d9`, brighter text `#f0f0f0`, muted text `#979797`.
 - Fonts via CSS variables on `:root`: `var(--font-smooch-sans)` (body/UI) and
   `var(--font-figtree)` (display/headings).
-- Several components accept a **`className`** prop (`Article`, `GitHub`, `Home`,
-  `IconLink`) — use it for spacing/positioning glue, not for restyling internals.
+- Most components accept a **`className`** prop (all of the form controls —
+  `Button`, `Checkbox`, `ControlPanel`, `Fieldset`, `RadioGroup`, `Select`,
+  `Slider`, `Stepper` — plus `Article`, `GitHub`, `Home`, `IconLink`) — use it
+  for spacing/positioning glue, not for restyling internals. `CommonLayout`,
+  `Description`, and `Tags` don't take one.
 
 ## Where the truth lives
 
@@ -37,7 +41,14 @@ and not author-facing. Style your own layout glue against the dark theme:
   component styles. Read it before adding any styling of your own.
 - Each component ships a `<Name>.prompt.md` (usage + variants) and `<Name>.d.ts`
   (the exact prop contract). Components, all on `window.BbInHoodieLab`:
-  `Article`, `CommonLayout`, `Description`, `GitHub`, `Home`, `IconLink`, `Tags`.
+  `Article`, `CommonLayout`, `Description`, `GitHub`, `Home`, `IconLink`, `Tags`,
+  and the form controls `Button`, `Checkbox`, `ControlPanel`, `Fieldset`,
+  `RadioGroup`, `Select`, `Slider`, `Stepper`.
+- The form controls are all **controlled** (`value`/`checked` + `onChange`, no
+  internal state to read back) and most take an optional `label` rendered
+  beside the control — pass it instead of wrapping your own `<label>`.
+  `Fieldset` groups several of them under one `legend` heading; `ControlPanel`
+  lays out multiple `Fieldset`s in a horizontal, wrapping row.
 
 ## Idiomatic example
 

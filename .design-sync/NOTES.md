@@ -8,10 +8,17 @@ is fed a purpose-built library bundle. Read this before re-syncing.
 
 - **`[GENERAL]` The DS bundle is built by a dedicated Vite library build**, not
   the app build. `cfg.buildCmd` runs `.design-sync/vite.ds.config.ts` (entry
-  `.design-sync/ds-entry.tsx`, a barrel re-exporting the 7 storied components)
-  into `.design-sync/ds-dist/`, then copies the hand-authored
+  `.design-sync/ds-entry.tsx`, a barrel re-exporting the 15 storied components:
+  the original 7 top-level ones plus 8 `form/` controls added 2026-08) into
+  `.design-sync/ds-dist/`, then copies the hand-authored
   `.design-sync/ds-meta/{package.json,ds.d.ts}` alongside the emitted
   `ds.js` / `bb-in-hoodie-lab.css`.
+  - **`[GENERAL]` Adding a new storied component requires editing BOTH
+    `ds-entry.tsx` (re-export it) AND `ds-meta/ds.d.ts` (hand-author its
+    `<Name>Props` interface) before the driver run** — a component with a
+    story but no barrel export builds fine (silently absent from
+    `window.BbInHoodieLab`) and shows as `unpaired`/missing in compare. There
+    is no automatic discovery step that catches this.
   - Why a barrel + custom build: the components import `*.module.scss`, and the
     converter's own esbuild bundle (`lib/bundle.mjs`, fork-forbidden) has **no
     scss loader**. Pre-compiling with Vite resolves scss → class strings + a
@@ -26,6 +33,18 @@ is fed a purpose-built library bundle. Read this before re-syncing.
   `src/common/components/<Name>/<Name>.tsx`). The converter discovers component
   exports and prop types from this file (it walks up from `--entry` to
   `ds-dist/package.json`, whose `types` points here).
+- **`[GENERAL]` Editor type errors on `ds-entry.tsx`:** the root `tsconfig.json`
+  `include` is `["src", "vite-env.d.ts"]` — `.design-sync/` isn't covered, so
+  an editor opening `ds-entry.tsx` falls back to an inferred project with no
+  `@/*` path alias and no `vite/client` ambient types, producing spurious
+  "Cannot find module" errors on every `@/...` import AND every
+  `.module.scss`/`.png`/`.css` import in the components it re-exports (even
+  though the real build — `vite.ds.config.ts`'s own `resolve.alias` — has
+  always worked fine; `tsc`/esbuild don't typecheck at build time). Fixed with
+  `.design-sync/tsconfig.json` (`extends: "../tsconfig.json"`,
+  `include: ["ds-entry.tsx", "ds-meta/ds.d.ts", "../vite-env.d.ts"]`) —
+  `vite-env.d.ts` is required, not optional: without it you still get the
+  asset-import errors even with the path alias fixed.
 - **`[GENERAL]` Config path resolution gotcha:** `cfg.cssEntry` / `cfg.tsconfig`
   resolve **relative to PKG_DIR** (`.design-sync/ds-dist`), not cwd. Hence
   `cssEntry: "bb-in-hoodie-lab.css"` and `tsconfig: "../../tsconfig.json"`.
@@ -105,7 +124,22 @@ is fed a purpose-built library bundle. Read this before re-syncing.
   isn't needed for it, but it's the capture viewport, so a viewport edit
   re-grades.
 - **Palette:** `src/common/styles/colors.scss` defines more colors than the
-  synced components use — `#1a1a1a` (grey-dark), `#0a0a0a` (black), and the
-  lime accent `#e9ed64` are absent from the compiled bundle CSS, so they were
-  deliberately left out of `conventions.md` (header names only what's in the
-  build). If a future component uses them, they'll appear and can be added.
+  synced components use. As of the 2026-08 form-controls sync, `#1a1a1a`
+  (grey-dark, used by `Select`'s dropdown) and `#0a0a0a` (black) DO appear in
+  the compiled bundle CSS and are now documented in `conventions.md`. The lime
+  accent `#e9ed64` is still absent — re-check with `grep -oE "#[0-9a-fA-F]{3,6}"
+  ds-bundle/_ds_bundle.css | sort -u` whenever new components sync, since this
+  list drifts every time the component roster grows.
+- **`ds.d.ts`/`ds-entry.tsx` drift risk is now proven, not hypothetical**: the
+  2026-08 re-sync added 8 `form/` components (Button, Checkbox, ControlPanel,
+  Fieldset, RadioGroup, Select, Slider, Stepper) that had stories but were
+  never in the barrel/`.d.ts` from the original sync. Cross-check
+  `curl -s localhost:6006/index.json` (storybook titles) against
+  `ds-entry.tsx` exports before every re-sync to catch this early instead of
+  discovering it via `[BUNDLE_EXPORT]`/`unpaired` mid-run.
+- **`ControlPanel` was renamed from `ControlBar`** in the source repo
+  (2026-08, same session as the form-controls sync) before it was ever synced
+  — so there was no orphaned remote file to clean up. If you see `ControlBar`
+  referenced anywhere (e.g. in a `templates/` design built with the app before
+  this sync), that's the pre-rename name; the synced component is
+  `ControlPanel`.
