@@ -2,12 +2,14 @@
 @use "@/common/styles/mixins" as mixins;
 
 .fieldset {
-  background-color: colors.get-rgba(white, 0.02);
+  background-color: colors.get-rgba(grey-light, 0.04);
   border: none;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   min-inline-size: auto;
-  padding: 20px 24px 24px;
+  padding: 8px 24px 20px;
 }
 
 .legend {
@@ -23,6 +25,8 @@
 
 .content {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 16px;
+  justify-content: center;
 }

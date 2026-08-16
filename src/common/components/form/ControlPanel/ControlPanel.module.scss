@@ -1,10 +1,15 @@
+@use "@/common/styles/colors" as colors;
+
 .control-panel {
+  backdrop-filter: blur(6px);
+  background-color: colors.get-rgba(grey-background, 0.66);
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
+  padding: 16px;
 
   > * {
     flex: 1;
-    min-width: 220px;
+    min-width: 260px;
   }
 }
