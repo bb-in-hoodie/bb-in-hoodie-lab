@@ -11,6 +11,7 @@ export interface ArticleProps {
   description: string;
   githubUrl?: string;
   homeUrl?: string;
+  controls?: ReactNode;
   className?: string;
 }
 export declare const Article: FC<ArticleProps>;
@@ -20,6 +21,7 @@ export interface CommonLayoutProps {
   tags: string[];
   description: string;
   githubUrl?: string;
+  controls?: ReactNode;
   children?: ReactNode;
 }
 export declare const CommonLayout: FC<CommonLayoutProps>;

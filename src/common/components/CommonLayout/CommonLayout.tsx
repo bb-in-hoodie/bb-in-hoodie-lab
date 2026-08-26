@@ -14,10 +14,18 @@ interface Props {
   tags: string[];
   description: string;
   githubUrl?: string;
+  controls?: ReactNode;
   children?: ReactNode;
 }
 
-function CommonLayout({ title, tags, description, githubUrl, children }: Props) {
+function CommonLayout({
+  title,
+  tags,
+  description,
+  githubUrl,
+  controls,
+  children,
+}: Props) {
   useDocumentMetadata({ title, description });
 
   return (
@@ -29,6 +37,7 @@ function CommonLayout({ title, tags, description, githubUrl, children }: Props) 
         description={description}
         githubUrl={githubUrl}
         homeUrl={DEV_HOME_URL}
+        controls={controls}
         className={cx("article")}
       />
     </main>

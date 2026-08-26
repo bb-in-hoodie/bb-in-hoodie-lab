@@ -1,68 +1,16 @@
 import classNames from "classnames/bind";
-import { motion, type Transition, type Variants } from "framer-motion";
-import { type CSSProperties, type ReactNode, useState } from "react";
-
-import { trackEvent } from "@/common/helpers/analytics";
+import { type ReactNode } from "react";
 
 import styles from "./Description.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Description({ children }: { children: ReactNode }) {
-  const [expanded, setExpanded] = useState(false);
-
-  const boxStyle = {
-    "--mask-opacity": expanded ? 0 : 1,
-  } as CSSProperties;
-
   return (
     <div className={cx("description")}>
-      <div style={boxStyle} className={cx("box", { expanded })}>
-        <p className={cx("text")}>{children}</p>
-      </div>
-      <motion.button
-        type="button"
-        onClick={() => {
-          trackEvent("description_toggle", {
-            action: expanded ? "collapse" : "expand",
-          });
-          setExpanded((prev) => !prev);
-        }}
-        aria-expanded={expanded}
-        aria-label={expanded ? "Collapse description" : "Expand description"}
-        initial="rest"
-        animate="rest"
-        whileHover="hover"
-        whileTap="pressed"
-        variants={TOGGLE_VARIANTS}
-        transition={TOGGLE_TRANSITION}
-        className={cx("toggle")}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-          className={cx("chevron")}
-        >
-          <path
-            d="M6 15L12 9L18 15"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </motion.button>
+      <p className={cx("text")}>{children}</p>
     </div>
   );
 }
 
 export default Description;
-
-const TOGGLE_VARIANTS: Variants = {
-  rest: { scale: 1, opacity: 0.8 },
-  hover: { scale: 1.1, opacity: 1 },
-  pressed: { scale: 0.88, opacity: 0.78 },
-};
-
-const TOGGLE_TRANSITION: Transition = { duration: 0.15, ease: "easeOut" };

@@ -1,8 +1,10 @@
 import classNames from "classnames/bind";
+import { type ReactNode } from "react";
 
 import Description from "../Description/Description";
 import GitHub from "../GitHub/GitHub";
 import Home from "../Home/Home";
+import Tabs, { type TabItem } from "../Tabs/Tabs";
 import Tags from "../Tags/Tags";
 import styles from "./Article.module.scss";
 
@@ -14,6 +16,7 @@ interface Props {
   description: string;
   githubUrl?: string;
   homeUrl?: string;
+  controls?: ReactNode;
   className?: string;
 }
 
@@ -23,8 +26,21 @@ function Article({
   description,
   githubUrl,
   homeUrl,
+  controls,
   className,
 }: Props) {
+  const tabs: TabItem[] = [
+    {
+      tabType: "description",
+      label: "DESCRIPTION",
+      panel: <Description>{description}</Description>,
+    },
+  ];
+
+  if (controls) {
+    tabs.push({ tabType: "controls", label: "CONTROLS", panel: controls });
+  }
+
   return (
     <article className={cx("article", className)}>
       <header className={cx("header")}>
@@ -39,7 +55,7 @@ function Article({
         </div>
         <Tags tags={tags} />
       </header>
-      <Description>{description}</Description>
+      <Tabs tabs={tabs} />
     </article>
   );
 }

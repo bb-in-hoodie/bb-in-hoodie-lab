@@ -1,0 +1,95 @@
+@use "@/common/styles/mixins" as mixins;
+@use "@/common/styles/colors" as colors;
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  // lets this flex item shrink below its content height when the parent
+  // (Article) runs out of vertical room, instead of overflowing it
+  min-height: 0;
+
+  @include mixins.media-mobile {
+    gap: 16px;
+  }
+}
+
+.tablist {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.tab-button {
+  backdrop-filter: blur(6px);
+  background-color: colors.get-rgba(grey-dark, 0.52);
+  border: 1px solid colors.get-rgba(grey-light, 0.15);
+  border-radius: 20px;
+  color: colors.get-hex(grey-description);
+  font-size: clamp(10px, 1.6vw, 12px);
+  height: 40px;
+  letter-spacing: 0.02em !important; // overrides mixins.font-figtree
+  outline: 1px solid transparent;
+  padding: 8px 14px;
+
+  @include mixins.font-figtree;
+  @include mixins.press-effect(
+    $transitions: (
+      color 0.2s,
+      border-color 0.2s,
+      outline-color 0.2s,
+    )
+  );
+
+  &.active {
+    border-color: colors.get-hex(grey-dark);
+    color: colors.get-hex(white);
+    outline-color: colors.get-hex(grey-description);
+    outline-offset: 0;
+  }
+
+  &:focus-visible {
+    @include mixins.focus-ring;
+  }
+}
+
+.panels {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  max-height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+.panel {
+  align-self: start;
+  backdrop-filter: blur(6px);
+  background-color: colors.get-rgba(grey-background, 0.52);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px colors.get-rgba(grey-light, 0.1);
+  grid-area: 1 / 1; // stacks every panel in the same cell so switching tabs cross-fades
+  max-height: 100%; // caps height to its parent's available space so overflow-y can activate
+  opacity: 0;
+  overflow-y: auto; // scrolls internally once content exceeds max-height
+  pointer-events: none; // hidden panels must not intercept clicks
+  scrollbar-width: none;
+  transition: opacity 0.25s ease-out;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.description {
+  max-width: min(420px, 100%);
+}
+
+.controls {
+  max-width: min(640px, 100%);
+}
