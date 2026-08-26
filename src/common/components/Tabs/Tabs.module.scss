@@ -73,12 +73,9 @@
   opacity: 0;
   overflow-y: auto; // scrolls internally once content exceeds max-height
   pointer-events: none; // hidden panels must not intercept clicks
-  scrollbar-width: none;
   transition: opacity 0.25s ease-out;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  @include mixins.hide-scrollbar;
 
   &.active {
     opacity: 1;
