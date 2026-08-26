@@ -2,6 +2,7 @@ import classNames from "classnames/bind";
 import { type KeyboardEvent, type ReactNode, useRef, useState } from "react";
 
 import { trackEvent } from "@/common/helpers/analytics";
+import useDevice from "@/common/hooks/useDevice";
 
 import styles from "./Tabs.module.scss";
 
@@ -20,7 +21,10 @@ interface Props {
 }
 
 function Tabs({ tabs }: Props) {
-  const [activePanel, setActivePanel] = useState<TabType | null>(null);
+  const device = useDevice();
+  const [activePanel, setActivePanel] = useState<TabType | null>(
+    device === "pc" ? "description" : null, // open the description tab by default on PC
+  );
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([
     /* filled per tab via the ref callback in the button map below */
