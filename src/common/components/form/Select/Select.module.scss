@@ -34,10 +34,7 @@
 
   @include mixins.font-smooch-sans;
   @include mixins.press-effect($transitions: background-color 0.15s ease-out);
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 
   &:hover {
     background-color: colors.get-rgba(grey-light, 0.1);
@@ -80,10 +77,7 @@
   @include mixins.press-effect(
     $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
   );
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 
   &:hover {
     background-color: colors.get-rgba(grey-light, 0.08);

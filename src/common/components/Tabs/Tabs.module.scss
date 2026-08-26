@@ -49,9 +49,7 @@
     outline-offset: 0;
   }
 
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 }
 
 .panels {

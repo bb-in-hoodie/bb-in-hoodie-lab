@@ -89,9 +89,11 @@
   }
 }
 
-@mixin focus-ring {
-  outline: 2px solid colors.get-rgba(white, 0.4);
-  outline-offset: 2px;
+@mixin focus-ring($selector: "&:focus-visible") {
+  #{$selector} {
+    outline: 2px solid colors.get-rgba(white, 0.4);
+    outline-offset: 2px;
+  }
 }
 
 @mixin hide-scrollbar {

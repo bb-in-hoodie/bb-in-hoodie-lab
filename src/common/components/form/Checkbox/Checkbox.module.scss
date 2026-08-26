@@ -29,9 +29,7 @@
   position: absolute;
   width: 1px;
 
-  &:focus-visible + .box {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring("&:focus-visible + .box");
 }
 
 .box {

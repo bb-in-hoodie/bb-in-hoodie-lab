@@ -34,10 +34,7 @@
   @include mixins.press-effect(
     $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
   );
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 
   &:hover:not(:disabled) {
     background-color: colors.get-rgba(grey-light, 0.08);
@@ -66,8 +63,5 @@
   text-align: center;
 
   @include mixins.font-figtree;
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 }

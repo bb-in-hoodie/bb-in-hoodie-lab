@@ -36,9 +36,7 @@
   position: relative;
   touch-action: none;
 
-  &:focus-visible .thumb {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring("&:focus-visible .thumb");
 }
 
 .track {

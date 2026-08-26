@@ -33,10 +33,7 @@
   @include mixins.press-effect(
     $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
   );
-
-  &:focus-visible {
-    @include mixins.focus-ring;
-  }
+  @include mixins.focus-ring;
 
   &:hover {
     color: colors.get-hex(grey-light);
