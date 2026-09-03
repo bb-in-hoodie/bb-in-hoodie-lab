@@ -4,7 +4,8 @@
 .row {
   align-items: center;
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 10px 16px;
   justify-content: space-between;
 }
 
@@ -18,7 +19,8 @@
 .radio-group {
   background-color: colors.get-rgba(grey-light, 0.05);
   border-radius: 4px;
-  display: inline-flex;
+  display: flex;
+  flex: 1;
   gap: 2px;
   padding: 2px;
 }
@@ -26,6 +28,7 @@
 .option {
   border-radius: 3px;
   color: colors.get-hex(grey-description);
+  flex: 1;
   font-size: 16px;
   padding: 4px 14px;
 

@@ -1,15 +1,9 @@
 @use "@/common/styles/colors" as colors;
 
 .control-panel {
-  backdrop-filter: blur(6px);
-  background-color: colors.get-rgba(grey-background, 0.66);
-  display: flex;
-  flex-wrap: wrap;
+  background-color: colors.get-rgba(grey-background, 0.2);
+  display: grid;
   gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   padding: 16px;
-
-  > * {
-    flex: 1;
-    min-width: 260px;
-  }
 }
