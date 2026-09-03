@@ -33,6 +33,11 @@
   outline: 1px solid transparent;
   padding: 8px 14px;
 
+  &:hover {
+    color: colors.get-hex(grey-light);
+    transform: scale(1.02);
+  }
+
   @include mixins.font-figtree;
   @include mixins.press-effect(
     $transitions: (
