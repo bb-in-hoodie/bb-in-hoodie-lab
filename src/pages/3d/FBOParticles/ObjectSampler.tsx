@@ -7,11 +7,11 @@ import { getParticlesCount } from "@/pages/3d/FBOParticles/helpers/spec";
 
 import { type ObjectSpec, type SampledData } from "./helpers/objectSpecs";
 
-type Props = {
+interface Props {
   spec: ObjectSpec;
   isSelected?: boolean;
   onSelected: (data: SampledData) => void;
-};
+}
 
 function ObjectSampler({ spec, isSelected = false, onSelected }: Props) {
   const meshRef = useRef<Mesh>(null);

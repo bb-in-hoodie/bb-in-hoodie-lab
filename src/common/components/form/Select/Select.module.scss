@@ -1,0 +1,90 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.label {
+  color: colors.get-hex(grey-light);
+  font-size: 18px;
+
+  @include mixins.font-smooch-sans;
+}
+
+.select {
+  min-width: 120px;
+  position: relative;
+}
+
+.button {
+  align-items: center;
+  background-color: colors.get-rgba(grey-light, 0.05);
+  border-radius: 4px;
+  color: colors.get-hex(white);
+  display: flex;
+  font-size: 16px;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 5px 12px;
+  width: 100%;
+
+  @include mixins.font-smooch-sans;
+  @include mixins.press-effect($transitions: background-color 0.15s ease-out);
+  @include mixins.focus-ring;
+
+  &:hover {
+    background-color: colors.get-rgba(grey-light, 0.1);
+  }
+}
+
+.chevron {
+  color: colors.get-hex(grey-description);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+
+  &.open {
+    transform: rotate(180deg);
+  }
+}
+
+.options {
+  background-color: colors.get-hex(grey-dark);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px colors.get-rgba(black, 0.5);
+  left: 0;
+  padding: 4px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+}
+
+.option {
+  border-radius: 3px;
+  color: colors.get-hex(grey-description);
+  cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  padding: 6px 10px;
+  text-align: left;
+  width: 100%;
+
+  @include mixins.font-smooch-sans;
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
+  );
+  @include mixins.focus-ring;
+
+  &:hover {
+    background-color: colors.get-rgba(grey-light, 0.08);
+    color: colors.get-hex(white);
+  }
+
+  &.selected {
+    color: colors.get-hex(white);
+  }
+}

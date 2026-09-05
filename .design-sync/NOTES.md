@@ -1,0 +1,170 @@
+# design-sync notes — bb-in-hoodie-lab
+
+This repo is a **Vite application** (the lab site), not a packaged component
+library. There is no published `dist/` with component exports, so the converter
+is fed a purpose-built library bundle. Read this before re-syncing.
+
+## Build setup (how the bundle is produced)
+
+- **`[GENERAL]` The DS bundle is built by a dedicated Vite library build**, not
+  the app build. `cfg.buildCmd` runs `.design-sync/vite.ds.config.ts` (entry
+  `.design-sync/ds-entry.tsx`, a barrel re-exporting the 15 storied components:
+  the original 7 top-level ones plus 8 `form/` controls added 2026-08) into
+  `.design-sync/ds-dist/`, then copies the hand-authored
+  `.design-sync/ds-meta/{package.json,ds.d.ts}` alongside the emitted
+  `ds.js` / `bb-in-hoodie-lab.css`.
+  - **`[GENERAL]` Adding a new storied component requires editing BOTH
+    `ds-entry.tsx` (re-export it) AND `ds-meta/ds.d.ts` (hand-author its
+    `<Name>Props` interface) before the driver run** — a component with a
+    story but no barrel export builds fine (silently absent from
+    `window.BbInHoodieLab`) and shows as `unpaired`/missing in compare. There
+    is no automatic discovery step that catches this.
+  - Why a barrel + custom build: the components import `*.module.scss`, and the
+    converter's own esbuild bundle (`lib/bundle.mjs`, fork-forbidden) has **no
+    scss loader**. Pre-compiling with Vite resolves scss → class strings + a
+    single extracted CSS, which esbuild can then wrap as `window.BbInHoodieLab`.
+  - **`[GENERAL]` The whole React family is externalized** in the lib build
+    (`react`, `react-dom`, `react-dom/client`, `react/jsx-runtime`,
+    `react/jsx-dev-runtime`, `react-is`, `scheduler`). The converter only shims
+    React by import specifier; inlining it would create a second React instance
+    and break hooks. Everything else (framer-motion, classnames) is bundled.
+- **`[GENERAL]` `ds-meta/ds.d.ts` is hand-authored** — the app has no emitted
+  type declarations. It mirrors each component's props (see
+  `src/common/components/<Name>/<Name>.tsx`). The converter discovers component
+  exports and prop types from this file (it walks up from `--entry` to
+  `ds-dist/package.json`, whose `types` points here).
+- **`[GENERAL]` Editor type errors on `ds-entry.tsx`:** the root `tsconfig.json`
+  `include` is `["src", "vite-env.d.ts"]` — `.design-sync/` isn't covered, so
+  an editor opening `ds-entry.tsx` falls back to an inferred project with no
+  `@/*` path alias and no `vite/client` ambient types, producing spurious
+  "Cannot find module" errors on every `@/...` import AND every
+  `.module.scss`/`.png`/`.css` import in the components it re-exports (even
+  though the real build — `vite.ds.config.ts`'s own `resolve.alias` — has
+  always worked fine; `tsc`/esbuild don't typecheck at build time). Fixed with
+  `.design-sync/tsconfig.json` (`extends: "../tsconfig.json"`,
+  `include: ["ds-entry.tsx", "ds-meta/ds.d.ts", "../vite-env.d.ts"]`) —
+  `vite-env.d.ts` is required, not optional: without it you still get the
+  asset-import errors even with the path alias fixed.
+- **`[GENERAL]` Config path resolution gotcha:** `cfg.cssEntry` / `cfg.tsconfig`
+  resolve **relative to PKG_DIR** (`.design-sync/ds-dist`), not cwd. Hence
+  `cssEntry: "bb-in-hoodie-lab.css"` and `tsconfig: "../../tsconfig.json"`.
+  (`cfg.entry` and `cfg.storybookStatic` are cwd-relative — different rule.)
+
+## Styling / fonts
+
+- **`[GENERAL]` Base styles ship via the bundle CSS.** `ds-entry.tsx` imports
+  `@/common/styles/globals.scss` (dark theme: bg `#131313`, text `#d9d9d9`,
+  Smooch Sans body font, ul/button resets) so every design renders on-brand.
+  The component `.module.scss` files alone do not carry these.
+- **`[GENERAL]` Fonts are remote (Google Fonts).** The app loads Figtree +
+  Smooch Sans via a `<link>` in `index.html`. We ship the same as an `@import`
+  at the top of the bundle CSS (`.design-sync/ds-meta/ds-base.css`, imported
+  first in `ds-entry.tsx`). The validator reports `[FONT_REMOTE]` (ok).
+- **`[GENERAL]` Storybook reference needs the fonts too.** Added
+  `.storybook/preview-head.html` (same Google Fonts `<link>`) so the reference
+  render — the grading oracle — uses the real typefaces instead of a fallback
+  that would falsely match a fallback-rendered preview.
+
+## Storybook build
+
+- **`[GENERAL]` `.storybook/main.ts` `viteFinal` strips app-only Vite plugins**
+  (`inject-metadata`, `prerender-routes`). `prerender-routes.closeBundle` reads
+  `./dist/index.html`, which doesn't exist during a Storybook build and made it
+  exit non-zero. Without this, the reference build (and re-sync) fails
+  `[SB_BUILD_FAIL]`.
+
+## Assets
+
+- **`[GENERAL]` All assets are inlined as data URLs** (`assetsInlineLimit:
+  10_000_000` in `vite.ds.config.ts`). The design bundle ships only `ds.js`, so
+  vite's default (externalize images >4KB, e.g. `github-logo.png`) produced
+  asset paths that 404 in claude.ai/design → broken images. Inlining makes the
+  bundle self-contained.
+
+## Card background (dark theme)
+
+- **`[GENERAL]` The preview-card template hardcodes `body{background:#fff}`** in
+  an inline `<style>`, which wins over `globals.scss`'s `body` rule by load
+  order. This DS is dark-themed, so light-on-dark components vanished on the
+  white card. Fixed with a higher-specificity `html body { background-color:
+  #131313 }` (0,0,2 beats the inline 0,0,1) added to
+  `.design-sync/ds-meta/ds-base.css`. Harmless in rendered designs.
+
+## Card layout overrides
+
+- `Article` → `cardMode: "column"` (stories wider than a grid cell).
+- `CommonLayout` → `cardMode: "single"`, `primaryStory: "Default"`,
+  `viewport: "1200x800"`. It is a full-page layout (`.wrap` is
+  `position: fixed; inset: 0`). An **owned preview**
+  (`.design-sync/previews/CommonLayout.tsx`) wraps the story in a sized
+  `transform: translateZ(0)` container so the fixed layout gets a real
+  containing block and renders (the single-mode card alone left it 0-height /
+  blank).
+- `IconLink` / `GitHub` / `Home` → `viewport: "200x140"`. These are ~30px icon
+  links; a small card frames the icon clearly instead of stranding it top-left
+  in a large viewport. (At <768px width they render the 24px mobile size — fine
+  for an icon card.)
+
+## Re-sync risks (watch-list for the next run)
+
+- **`ds-meta/ds.d.ts` is hand-authored** and can drift from the component
+  sources. If a component's props change, update `ds.d.ts` to match — nothing
+  checks this automatically.
+- **`[REFERENCE_STALE?]` is expected** whenever only the build config changed
+  (e.g. `assetsInlineLimit`) without a DS-source change — the bundle sha moves
+  but the design doesn't. Rebuild the reference only when component sources or
+  styles change.
+- **Fonts and reference font-faithfulness** depend on `.storybook/preview-head.html`
+  and the remote `@import` in `ds-base.css`. The grading oracle needs egress to
+  `fonts.googleapis.com` / `fonts.gstatic.com`; a network-sandboxed shell would
+  blank fonts on both panels (see `[ASSETS_BLOCKED]`).
+- **CommonLayout's owned preview** is tied to the story's structure; if the
+  CommonLayout story or its `.wrap`/`.scene` CSS changes, re-verify the card.
+- The icon components' `viewport` framing is a presentation choice — re-grading
+  isn't needed for it, but it's the capture viewport, so a viewport edit
+  re-grades.
+- **Palette:** `src/common/styles/colors.scss` defines more colors than the
+  synced components use. As of the 2026-08 form-controls sync, `#1a1a1a`
+  (grey-dark, used by `Select`'s dropdown) and `#0a0a0a` (black) DO appear in
+  the compiled bundle CSS and are now documented in `conventions.md`. The lime
+  accent `#e9ed64` is still absent — re-check with `grep -oE "#[0-9a-fA-F]{3,6}"
+  ds-bundle/_ds_bundle.css | sort -u` whenever new components sync, since this
+  list drifts every time the component roster grows.
+- **`ds.d.ts`/`ds-entry.tsx` drift risk is now proven, not hypothetical**: the
+  2026-08 re-sync added 8 `form/` components (Button, Checkbox, ControlPanel,
+  Fieldset, RadioGroup, Select, Slider, Stepper) that had stories but were
+  never in the barrel/`.d.ts` from the original sync. Cross-check
+  `curl -s localhost:6006/index.json` (storybook titles) against
+  `ds-entry.tsx` exports before every re-sync to catch this early instead of
+  discovering it via `[BUNDLE_EXPORT]`/`unpaired` mid-run.
+- **`ControlPanel` was renamed from `ControlBar`** in the source repo
+  (2026-08, same session as the form-controls sync) before it was ever synced
+  — so there was no orphaned remote file to clean up. If you see `ControlBar`
+  referenced anywhere (e.g. in a `templates/` design built with the app before
+  this sync), that's the pre-rename name; the synced component is
+  `ControlPanel`.
+- **`[GENERAL]` 2026-09 re-sync: `Tabs` added.** New top-level component
+  (pill-tab switcher; `CommonLayout`/`Article` now compose it internally via
+  their `controls` prop). Caught the barrel/`.d.ts` drift risk (above) BEFORE
+  the build this time by diffing `curl -s localhost:6006/index.json` against
+  `ds-entry.tsx` first — added `Tabs` to both `ds-entry.tsx` and
+  `ds-meta/ds.d.ts` (`TabType`/`TabItem`/`TabsProps`) pre-emptively. Keep doing
+  this check first on every re-sync; it's cheaper than discovering it via
+  `[BUNDLE_EXPORT]` mid-run.
+- **`[GENERAL]` Owned previews silently go stale when their story file gains a
+  new story.** `CommonLayout`'s owned preview (`.design-sync/previews/CommonLayout.tsx`)
+  only exported `Default`; when `CommonLayout.stories.tsx` gained a
+  `WithControls` story (2026-09, testing the new `controls` prop) the re-sync
+  driver correctly flagged `1 unpaired` (`[STORY_CHANGED]` + "preview is
+  OWNED ... update it to mirror the new story"), but this requires reading
+  the driver log carefully — an owned preview never fails the BUILD, only
+  `compare`. Whenever a component with an owned preview gets a new/renamed
+  story, check that the owned `.tsx`'s exports still cover every story before
+  trusting a "changed" verdict.
+- **ControlPanel's layout changed from flex to CSS Grid** (2026-09):
+  `grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))`, replacing a
+  `display:flex` + per-child `min-width` that fought Fieldset's own
+  `min-width` in the CSS cascade (source-order-dependent, not just a design
+  preference — see the repo's own commit history if this needs re-deriving).
+  `conventions.md`'s ControlPanel description was updated to match ("responsive
+  grid, columns min 260px" instead of "horizontal, wrapping row").

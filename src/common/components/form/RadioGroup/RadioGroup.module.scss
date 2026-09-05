@@ -1,0 +1,49 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  justify-content: space-between;
+}
+
+.label {
+  color: colors.get-hex(grey-light);
+  font-size: 18px;
+
+  @include mixins.font-smooch-sans;
+}
+
+.radio-group {
+  background-color: colors.get-rgba(grey-light, 0.05);
+  border-radius: 4px;
+  display: flex;
+  flex: 1;
+  gap: 2px;
+  padding: 2px;
+}
+
+.option {
+  border-radius: 3px;
+  color: colors.get-hex(grey-description);
+  flex: 1;
+  font-size: 16px;
+  padding: 4px 14px;
+
+  @include mixins.font-smooch-sans;
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
+  );
+  @include mixins.focus-ring;
+
+  &:hover {
+    color: colors.get-hex(grey-light);
+  }
+
+  &.checked {
+    background-color: colors.get-rgba(white, 0.12);
+    color: colors.get-hex(white);
+  }
+}

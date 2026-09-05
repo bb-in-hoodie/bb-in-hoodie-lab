@@ -2,7 +2,10 @@ import homeIcon from "@/common/assets/images/home.png";
 
 import IconLink from "../IconLink/IconLink";
 
-type Props = { url: string; className?: string };
+interface Props {
+  url: string;
+  className?: string;
+}
 
 function Home({ url, className }: Props) {
   return (
@@ -10,8 +13,8 @@ function Home({ url, className }: Props) {
       url={url}
       iconSrc={homeIcon}
       ariaLabel="Homepage"
-      className={className}
       eventName="home_link_click"
+      className={className}
     />
   );
 }

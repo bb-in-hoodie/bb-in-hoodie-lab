@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["ds-entry.tsx", "ds-meta/ds.d.ts", "../vite-env.d.ts"]
+}

@@ -9,11 +9,11 @@ import {
   ShaderMaterial,
 } from "three";
 
-export type UseFboSimulationParams = {
+export interface UseFboSimulationParams {
   FboMaterialClass: typeof ShaderMaterial;
   fboSettings: Parameters<typeof useFBO>;
   targetMaterialRef?: React.RefObject<ThreeElements["shaderMaterial"] | null>;
-};
+}
 
 type InitPhase = "idle" | "init" | "active";
 

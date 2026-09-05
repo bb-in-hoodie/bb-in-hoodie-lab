@@ -1,0 +1,67 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.label {
+  color: colors.get-hex(grey-light);
+  font-size: 18px;
+
+  @include mixins.font-smooch-sans;
+}
+
+.stepper {
+  align-items: center;
+  background-color: colors.get-rgba(grey-light, 0.05);
+  border-radius: 4px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.step-button {
+  color: colors.get-hex(grey-description);
+  flex-shrink: 0;
+  font-size: 18px;
+  height: 28px;
+  line-height: 1;
+  width: 28px;
+
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
+  );
+  @include mixins.focus-ring;
+
+  &:hover:not(:disabled) {
+    background-color: colors.get-rgba(grey-light, 0.08);
+    color: colors.get-hex(white);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  &:first-child,
+  &:last-child {
+    border-radius: 4px;
+  }
+}
+
+.value {
+  background-color: transparent;
+  border: none;
+  color: colors.get-hex(white);
+  font-size: 13px;
+  min-width: 52px;
+  outline: none;
+  padding: 0;
+  text-align: center;
+
+  @include mixins.font-figtree;
+  @include mixins.focus-ring;
+}

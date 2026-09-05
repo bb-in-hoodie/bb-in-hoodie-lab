@@ -1,0 +1,38 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.button {
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 7px 16px;
+
+  @include mixins.font-smooch-sans;
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, color 0.15s ease-out)
+  );
+  @include mixins.focus-ring;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+}
+
+.secondary {
+  background-color: colors.get-rgba(grey-light, 0.05);
+  color: colors.get-hex(grey-light);
+
+  &:hover:not(:disabled) {
+    background-color: colors.get-rgba(grey-light, 0.1);
+    color: colors.get-hex(white);
+  }
+}
+
+.primary {
+  background-color: colors.get-hex(grey-light);
+  color: colors.get-hex(grey-background);
+
+  &:hover:not(:disabled) {
+    background-color: colors.get-hex(white);
+  }
+}

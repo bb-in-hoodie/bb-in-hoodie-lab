@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { SITE_DESCRIPTION } from "@/common/constants/environment";
 import { formatPageTitle } from "@/common/helpers/metadata";
 
-type Args = {
+interface Args {
   title?: string;
   description?: string;
-};
+}
 
 function useDocumentMetadata({ title, description }: Args) {
   useEffect(() => {
@@ -39,13 +39,17 @@ function useDocumentMetadata({ title, description }: Args) {
 
     return () => {
       document.title = previousTitle;
-      titleMetas.forEach((meta, i) => {
-        const previous = previousTitleContents[i];
-        if (previous !== null) meta?.setAttribute("content", previous);
+      titleMetas.forEach((meta, index) => {
+        const previous = previousTitleContents[index];
+        if (previous !== null) {
+          meta?.setAttribute("content", previous);
+        }
       });
-      descriptionMetas.forEach((meta, i) => {
-        const previous = previousDescriptionContents[i];
-        if (previous !== null) meta?.setAttribute("content", previous);
+      descriptionMetas.forEach((meta, index) => {
+        const previous = previousDescriptionContents[index];
+        if (previous !== null) {
+          meta?.setAttribute("content", previous);
+        }
       });
     };
   }, [title, description]);

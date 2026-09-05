@@ -7,14 +7,14 @@ import styles from "./IconLink.module.scss";
 
 const cx = classNames.bind(styles);
 
-export type IconLinkProps = {
+export interface IconLinkProps {
   url: string;
   iconSrc: string;
   ariaLabel: string;
   className?: string;
   iconClassName?: string;
   eventName?: string;
-};
+}
 
 function IconLink({
   url,
@@ -26,7 +26,6 @@ function IconLink({
 }: IconLinkProps) {
   return (
     <motion.a
-      className={cx("root", className)}
       href={url}
       target="_blank"
       rel="noopener noreferrer"
@@ -38,12 +37,13 @@ function IconLink({
       variants={ICON_LINK_VARIANTS}
       transition={ICON_LINK_TRANSITION}
       onClick={eventName ? () => trackEvent(eventName) : undefined}
+      className={cx("root", className)}
     >
       <img
-        className={cx("icon", iconClassName)}
         src={iconSrc}
         alt=""
         draggable={false}
+        className={cx("icon", iconClassName)}
       />
     </motion.a>
   );

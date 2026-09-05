@@ -1,0 +1,7 @@
+{
+  "name": "bb-in-hoodie-lab",
+  "version": "0.0.0",
+  "private": true,
+  "module": "ds.js",
+  "types": "ds.d.ts"
+}

@@ -7,7 +7,10 @@ import styles from "./GitHub.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = { url: string; className?: string };
+interface Props {
+  url: string;
+  className?: string;
+}
 
 function GitHub({ url, className }: Props) {
   return (
@@ -15,9 +18,9 @@ function GitHub({ url, className }: Props) {
       url={url}
       iconSrc={githubLogo}
       ariaLabel="GitHub repository"
-      className={className}
       iconClassName={cx("logo")}
       eventName="github_link_click"
+      className={className}
     />
   );
 }

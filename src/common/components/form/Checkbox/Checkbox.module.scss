@@ -1,0 +1,62 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.checkbox {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 16px;
+  -webkit-tap-highlight-color: transparent;
+
+  &.with-label {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.label {
+  color: colors.get-hex(grey-light);
+  font-size: 18px;
+
+  @include mixins.font-smooch-sans;
+}
+
+// visually hidden but still focusable
+.input {
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+
+  @include mixins.focus-ring("&:focus-visible + .box");
+}
+
+.box {
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid colors.get-rgba(grey-light, 0.35);
+  border-radius: 4px;
+  display: inline-flex;
+  height: 18px;
+  justify-content: center;
+  width: 18px;
+
+  @include mixins.press-effect(
+    $transitions: (background-color 0.15s ease-out, border-color 0.15s ease-out)
+  );
+
+  svg {
+    opacity: 0;
+  }
+
+  &.checked {
+    background-color: colors.get-hex(grey-light);
+    border-color: colors.get-hex(grey-light);
+    color: colors.get-hex(grey-background);
+
+    svg {
+      opacity: 1;
+    }
+  }
+}

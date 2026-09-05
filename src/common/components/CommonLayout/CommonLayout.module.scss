@@ -1,16 +1,10 @@
-@use "@/common/styles/mixins" as mixins;
-
 .wrap {
   display: flex;
   flex-direction: column;
   inset: 0;
   overflow: hidden;
-  padding: 30px 40px;
+  padding: clamp(18px, 3.5vw, 30px) clamp(18px, 4vw, 40px);
   position: fixed;
-
-  @include mixins.media-mobile {
-    padding: 18px;
-  }
 }
 
 .scene {

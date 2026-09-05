@@ -5,6 +5,8 @@ export function trackEvent(
   params?: Record<string, unknown>
 ) {
   const gtag = (window as Window & { gtag?: Gtag }).gtag;
-  if (typeof gtag !== "function") return;
+  if (typeof gtag !== "function") {
+    return;
+  }
   gtag("event", eventName, params);
 }

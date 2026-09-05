@@ -6,16 +6,3 @@
   height: 100%;
   width: 100%;
 }
-
-.leva-container {
-  bottom: 16px;
-  pointer-events: none;
-  position: fixed;
-  right: 16px;
-  width: 280px;
-  z-index: 1000;
-
-  > * {
-    pointer-events: auto;
-  }
-}

@@ -1,0 +1,64 @@
+@use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.header {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  color: colors.get-hex(grey-light);
+  font-size: 18px;
+
+  @include mixins.font-smooch-sans;
+}
+
+.value {
+  color: colors.get-hex(grey-description);
+  font-size: 12px;
+
+  @include mixins.font-figtree;
+}
+
+.track-area {
+  align-items: center;
+  cursor: ew-resize;
+  display: flex;
+  height: 16px;
+  outline: none;
+  position: relative;
+  touch-action: none;
+
+  @include mixins.focus-ring("&:focus-visible .thumb");
+}
+
+.track {
+  background-color: colors.get-rgba(grey-light, 0.15);
+  border-radius: 1px;
+  height: 2px;
+  width: 100%;
+}
+
+.fill {
+  background-color: colors.get-hex(grey-light);
+  border-radius: 1px;
+  height: 2px;
+  left: 0;
+  position: absolute;
+}
+
+.thumb {
+  background-color: colors.get-hex(white);
+  border-radius: 50%;
+  height: 12px;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 12px;
+}

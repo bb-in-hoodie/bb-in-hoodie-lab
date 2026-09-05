@@ -21,7 +21,7 @@ import { type SampledData } from "./helpers/objectSpecs";
 
 extend({ ParticleSimulationMaterial, ParticlesMaterial });
 
-type Props = {
+interface Props {
   data: SampledData | null;
   /** multiplier applied to sampled noise offset (higher means wider particle spread) */
   noiseFrequency: number;
@@ -37,7 +37,7 @@ type Props = {
   springDamping: number;
   /** per-particle variation in the spring response (higher means more varied motion) */
   springJitter: number;
-};
+}
 
 export default function Particles({
   data,
@@ -69,11 +69,15 @@ export default function Particles({
 
   // convert vectors into textures and send those to material
   useEffect(() => {
-    if (!data) return;
+    if (!data) {
+      return;
+    }
 
     const { positions, normals } = data;
 
-    if (!positions.length || !normals.length) return;
+    if (!positions.length || !normals.length) {
+      return;
+    }
 
     const uTargetTexture = createDataTextureForParticle(
       createCombinedArray([positions, normals]),
@@ -149,7 +153,7 @@ export default function Particles({
 const INITIAL_POSITIONS = new Float32Array(getParticlesCount() * 3).map(
   () => Math.random() * 10,
 );
-const INDICES = new Float32Array(getParticlesCount()).map((_, i) => i);
+const INDICES = new Float32Array(getParticlesCount()).map((_, index) => index);
 const RANDOMS = new Float32Array(getParticlesCount()).map(() => Math.random());
 
 // world-space offset preserved from the original ParticlesMaterial uLightSource
