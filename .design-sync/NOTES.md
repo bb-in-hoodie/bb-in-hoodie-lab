@@ -143,3 +143,28 @@ is fed a purpose-built library bundle. Read this before re-syncing.
   referenced anywhere (e.g. in a `templates/` design built with the app before
   this sync), that's the pre-rename name; the synced component is
   `ControlPanel`.
+- **`[GENERAL]` 2026-09 re-sync: `Tabs` added.** New top-level component
+  (pill-tab switcher; `CommonLayout`/`Article` now compose it internally via
+  their `controls` prop). Caught the barrel/`.d.ts` drift risk (above) BEFORE
+  the build this time by diffing `curl -s localhost:6006/index.json` against
+  `ds-entry.tsx` first — added `Tabs` to both `ds-entry.tsx` and
+  `ds-meta/ds.d.ts` (`TabType`/`TabItem`/`TabsProps`) pre-emptively. Keep doing
+  this check first on every re-sync; it's cheaper than discovering it via
+  `[BUNDLE_EXPORT]` mid-run.
+- **`[GENERAL]` Owned previews silently go stale when their story file gains a
+  new story.** `CommonLayout`'s owned preview (`.design-sync/previews/CommonLayout.tsx`)
+  only exported `Default`; when `CommonLayout.stories.tsx` gained a
+  `WithControls` story (2026-09, testing the new `controls` prop) the re-sync
+  driver correctly flagged `1 unpaired` (`[STORY_CHANGED]` + "preview is
+  OWNED ... update it to mirror the new story"), but this requires reading
+  the driver log carefully — an owned preview never fails the BUILD, only
+  `compare`. Whenever a component with an owned preview gets a new/renamed
+  story, check that the owned `.tsx`'s exports still cover every story before
+  trusting a "changed" verdict.
+- **ControlPanel's layout changed from flex to CSS Grid** (2026-09):
+  `grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))`, replacing a
+  `display:flex` + per-child `min-width` that fought Fieldset's own
+  `min-width` in the CSS cascade (source-order-dependent, not just a design
+  preference — see the repo's own commit history if this needs re-deriving).
+  `conventions.md`'s ControlPanel description was updated to match ("responsive
+  grid, columns min 260px" instead of "horizontal, wrapping row").

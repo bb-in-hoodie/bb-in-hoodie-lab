@@ -53,6 +53,17 @@ export interface IconLinkProps {
 }
 export declare const IconLink: FC<IconLinkProps>;
 
+export type TabType = "description" | "controls";
+export interface TabItem {
+  tabType: TabType;
+  label: string;
+  panel: ReactNode;
+}
+export interface TabsProps {
+  tabs: TabItem[];
+}
+export declare const Tabs: FC<TabsProps>;
+
 export interface TagsProps {
   tags: string[];
 }

@@ -18,6 +18,10 @@ names.
   `position: fixed; inset: 0` and it fills the viewport. Use it as the page
   container (it renders a background "scene" via `children` plus an `Article`
   overlay). The other components are normal inline-flow elements.
+- **`CommonLayout`/`Article` accept an optional `controls` prop** (`ReactNode`).
+  Pass it and a "CONTROLS" pill tab appears next to "DESCRIPTION" — internally
+  this renders a `Tabs` (pill switcher, crossfades between panels). Omit
+  `controls` and only the description shows, tab-less.
 
 ## Styling idiom
 
@@ -41,14 +45,15 @@ and not author-facing. Style your own layout glue against the dark theme:
   component styles. Read it before adding any styling of your own.
 - Each component ships a `<Name>.prompt.md` (usage + variants) and `<Name>.d.ts`
   (the exact prop contract). Components, all on `window.BbInHoodieLab`:
-  `Article`, `CommonLayout`, `Description`, `GitHub`, `Home`, `IconLink`, `Tags`,
-  and the form controls `Button`, `Checkbox`, `ControlPanel`, `Fieldset`,
+  `Article`, `CommonLayout`, `Description`, `GitHub`, `Home`, `IconLink`, `Tabs`,
+  `Tags`, and the form controls `Button`, `Checkbox`, `ControlPanel`, `Fieldset`,
   `RadioGroup`, `Select`, `Slider`, `Stepper`.
 - The form controls are all **controlled** (`value`/`checked` + `onChange`, no
   internal state to read back) and most take an optional `label` rendered
   beside the control — pass it instead of wrapping your own `<label>`.
   `Fieldset` groups several of them under one `legend` heading; `ControlPanel`
-  lays out multiple `Fieldset`s in a horizontal, wrapping row.
+  lays out multiple `Fieldset`s in a responsive grid (columns min 260px wide,
+  wrapping to new rows as space runs out).
 
 ## Idiomatic example
 
@@ -59,6 +64,15 @@ and not author-facing. Style your own layout glue against the dark theme:
   tags={["THREE.JS", "FBO", "PARTICLES", "REACT"]}
   description="Frame Buffer Objects allow rendering to an off-screen buffer…"
   githubUrl="https://github.com/bb-in-hoodie/bb-in-hoodie-lab"
+  controls={
+    // optional: adds a "CONTROLS" tab alongside "DESCRIPTION"
+    <ControlPanel>
+      <Fieldset legend="simulation">
+        <Slider label="particles" min={0} max={1500} step={10}
+                value={count} onChange={setCount} />
+      </Fieldset>
+    </ControlPanel>
+  }
 >
   {/* your background scene — a canvas, a gradient, etc. */}
   <div style={{ width: "100%", height: "200vh",

@@ -40,19 +40,22 @@ function compose(S: any, key: string) {
   }, render);
 }
 
-const Composed = compose(S, "Default");
-
-export const Default = () =>
-  React.createElement(
-    'div',
-    {
-      style: {
-        position: 'relative',
-        transform: 'translateZ(0)',
-        width: '100%',
-        height: '100vh',
-        overflow: 'hidden',
+function wrapFixed(Composed: any) {
+  return () =>
+    React.createElement(
+      'div',
+      {
+        style: {
+          position: 'relative',
+          transform: 'translateZ(0)',
+          width: '100%',
+          height: '100vh',
+          overflow: 'hidden',
+        },
       },
-    },
-    React.createElement(Composed),
-  );
+      React.createElement(Composed),
+    );
+}
+
+export const Default = wrapFixed(compose(S, "Default"));
+export const WithControls = wrapFixed(compose(S, "WithControls"));

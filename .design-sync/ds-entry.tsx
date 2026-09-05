@@ -22,4 +22,5 @@ export { default as Stepper } from "@/common/components/form/Stepper/Stepper";
 export { default as GitHub } from "@/common/components/GitHub/GitHub";
 export { default as Home } from "@/common/components/Home/Home";
 export { default as IconLink } from "@/common/components/IconLink/IconLink";
+export { default as Tabs } from "@/common/components/Tabs/Tabs";
 export { default as Tags } from "@/common/components/Tags/Tags";
