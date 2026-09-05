@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@rolldown/plugin-babel": "^0.2.3",
     "@storybook/addon-a11y": "^10.3.6",
     "@storybook/addon-docs": "^10.3.6",
     "@storybook/react-vite": "^10.3.6",
@@ -39,6 +40,7 @@
     "@types/react-dom": "^19.2.7",
     "@types/three": "^0.184.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^10.2.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",

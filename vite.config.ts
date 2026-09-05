@@ -1,7 +1,8 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-import react from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { parse } from "node-html-parser";
 import { defineConfig, loadEnv, type Plugin } from "vite";
 
@@ -91,7 +92,12 @@ export default defineConfig(({ mode }) => {
   const injectMetadata = buildInjectMetadata({ gaMeasurementId: env.VITE_GA_MEASUREMENT_ID });
 
   return {
-    plugins: [react(), injectMetadata, prerenderRoutes],
+    plugins: [
+      react(),
+      babel({ presets: [reactCompilerPreset()] }),
+      injectMetadata,
+      prerenderRoutes,
+    ],
     resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
     build: {
       rollupOptions: {
