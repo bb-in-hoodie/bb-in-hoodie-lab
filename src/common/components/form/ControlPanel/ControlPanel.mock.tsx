@@ -12,7 +12,7 @@ import Select, { type SelectOption } from "@/common/components/form/Select/Selec
 import Slider from "@/common/components/form/Slider/Slider";
 import Stepper from "@/common/components/form/Stepper/Stepper";
 
-import ControlPanel from "./ControlPanel";
+import ControlPanel, { type ControlPanelProps } from "./ControlPanel";
 
 const MODE_OPTIONS: RadioOption[] = [
   { value: "drift", label: "drift" },
@@ -26,14 +26,16 @@ const PALETTE_OPTIONS: SelectOption[] = [
   { value: "ember", label: "Ember" },
 ];
 
-export function MockControlPanel() {
+export function MockControlPanel({
+  direction,
+}: Pick<ControlPanelProps, "direction">) {
   const [count, setCount] = useState(600);
   const [speed, setSpeed] = useState(1);
   const [palette, setPalette] = useState("mono");
   const [trails, setTrails] = useState(false);
   const [mode, setMode] = useState("orbit");
   return (
-    <ControlPanel>
+    <ControlPanel direction={direction}>
       <Fieldset legend="simulation">
         <Slider
           label="particles"

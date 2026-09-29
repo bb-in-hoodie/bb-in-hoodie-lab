@@ -7,12 +7,19 @@ const cx = classNames.bind(styles);
 
 export interface ControlPanelProps {
   children: ReactNode;
+  direction?: "vertical" | "horizontal";
   className?: string;
 }
 
-/** horizontal panel that lays out Fieldset cards */
-function ControlPanel({ children, className }: ControlPanelProps) {
-  return <div className={cx("control-panel", className)}>{children}</div>;
+/** panel that lays out Fieldset cards, stacked vertically by default */
+function ControlPanel({
+  children,
+  direction = "vertical",
+  className,
+}: ControlPanelProps) {
+  return (
+    <div className={cx("control-panel", direction, className)}>{children}</div>
+  );
 }
 
 export default ControlPanel;

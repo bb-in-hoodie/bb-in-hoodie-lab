@@ -4,6 +4,13 @@
   background-color: colors.get-rgba(grey-background, 0.2);
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   padding: 16px;
+}
+
+.vertical {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.horizontal {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
