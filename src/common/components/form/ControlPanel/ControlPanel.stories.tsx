@@ -12,6 +12,10 @@ export default meta;
 
 type Story = StoryObj<typeof ControlPanel>;
 
-export const Default: Story = {
+export const Vertical: Story = {
   render: () => <MockControlPanel />,
+};
+
+export const Horizontal: Story = {
+  render: () => <MockControlPanel direction="horizontal" />,
 };

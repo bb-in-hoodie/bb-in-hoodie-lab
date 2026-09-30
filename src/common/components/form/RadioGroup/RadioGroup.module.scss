@@ -7,6 +7,10 @@
   flex-wrap: wrap;
   gap: 10px 16px;
   justify-content: space-between;
+
+  @include mixins.media-mobile {
+    gap: 8px 12px;
+  }
 }
 
 .label {
@@ -14,6 +18,10 @@
   font-size: 18px;
 
   @include mixins.font-smooch-sans;
+
+  @include mixins.media-mobile {
+    font-size: 16px;
+  }
 }
 
 .radio-group {
