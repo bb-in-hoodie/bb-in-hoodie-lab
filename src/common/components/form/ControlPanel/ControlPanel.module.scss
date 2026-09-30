@@ -1,10 +1,15 @@
 @use "@/common/styles/colors" as colors;
+@use "@/common/styles/mixins" as mixins;
 
 .control-panel {
   background-color: colors.get-rgba(grey-background, 0.2);
   display: grid;
   gap: 14px;
   padding: 16px;
+
+  @include mixins.media-mobile {
+    gap: 10px;
+  }
 }
 
 .vertical {

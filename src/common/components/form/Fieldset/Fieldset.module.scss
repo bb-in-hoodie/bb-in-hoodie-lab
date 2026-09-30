@@ -10,6 +10,10 @@
   margin: 0;
   min-width: 0;
   padding: 8px 24px 20px;
+
+  @include mixins.media-mobile {
+    padding: 4px 18px 12px;
+  }
 }
 
 .legend {
@@ -21,6 +25,10 @@
   text-transform: uppercase;
 
   @include mixins.font-smooch-sans;
+
+  @include mixins.media-mobile {
+    font-size: 14px;
+  }
 }
 
 .content {
@@ -29,4 +37,8 @@
   flex-direction: column;
   gap: 10px;
   justify-content: center;
+
+  @include mixins.media-mobile {
+    gap: 8px;
+  }
 }

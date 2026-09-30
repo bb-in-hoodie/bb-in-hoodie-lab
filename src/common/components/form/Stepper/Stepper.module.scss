@@ -6,6 +6,10 @@
   display: flex;
   gap: 16px;
   justify-content: space-between;
+
+  @include mixins.media-mobile {
+    gap: 12px;
+  }
 }
 
 .label {
@@ -13,6 +17,10 @@
   font-size: 18px;
 
   @include mixins.font-smooch-sans;
+
+  @include mixins.media-mobile {
+    font-size: 16px;
+  }
 }
 
 .stepper {
